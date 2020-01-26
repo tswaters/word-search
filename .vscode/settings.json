@@ -1,6 +1,10 @@
 {
   "files.exclude": {
-    "**/.git": true
+    "**/.git": true,
+    "dist": true,
+    ".nyc_output": true,
+    "coverage": true,
+    "node_modules": true
   },
   "search.exclude": {
     "**/node_modules": true,
