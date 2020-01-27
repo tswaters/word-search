@@ -4,6 +4,8 @@
   "description": "Word Search Game",
   "private": true,
   "scripts": {
+    "precoverage": "rimraf coverage",
+    "coverage": "nyc npm test",
     "prebuild": "rimraf dist",
     "build": "webpack --mode=production",
     "start": "webpack-dev-server",
@@ -52,6 +54,13 @@
   "mocha": {
     "spec": "test/**/*.test.js",
     "require": "@babel/register"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "reporter": [
+      "text-summary",
+      "html"
+    ]
   },
   "eslintConfig": {
     "parser": "babel-eslint",
