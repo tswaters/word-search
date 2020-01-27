@@ -21,6 +21,20 @@ const sizes = {
           [DIRECTIONS.UP]: []
         }
       },
+      'index 11 - middle - all paths': {
+        index: 4,
+        usePaths: true,
+        actual: {
+          [DIRECTIONS.LTR]: ['e', 'f'],
+          [DIRECTIONS.LTR_DOWN]: ['e', 'i'],
+          [DIRECTIONS.LTR_UP]: ['e', 'c'],
+          [DIRECTIONS.RTL]: ['e', 'd'],
+          [DIRECTIONS.RTL_DOWN]: ['e', 'g'],
+          [DIRECTIONS.RTL_UP]: ['e', 'a'],
+          [DIRECTIONS.DOWN]: ['e', 'h'],
+          [DIRECTIONS.UP]: ['e', 'b']
+        }
+      },
       'index: 2 - top-right': {
         index: 2,
         actual: {
@@ -60,7 +74,7 @@ const sizes = {
           [DIRECTIONS.LTR_DOWN]: ['a', 'g', 'm', 's', 'y']
         }
       },
-      'index 11 - middle': {
+      'index 11 - middle - all paths': {
         index: 12,
         usePaths: true,
         actual: {
@@ -92,15 +106,13 @@ describe('grid', () =>
         describe(name, () =>
           usePaths
             ? it('paths', () =>
-                assert.deepEqual(paths({ board, xmax, index }), actual))
+                assert.deepEqual(paths({ board, xmax })(index), actual))
             : Object.entries(DIRECTIONS).forEach(
                 ([key, direction]) =>
                   actual[direction] &&
                   it(key, () =>
                     assert.deepEqual(
-                      usePaths
-                        ? paths({ board, xmax, index })(direction)
-                        : path({ board, xmax, index })(direction),
+                      path({ board, xmax })(index)(direction),
                       actual[direction]
                     )
                   )
