@@ -21,7 +21,7 @@ module.exports = (_, argv) => {
       port: 9000
     },
     entry: {
-      'word-search': './src/js/'
+      'word-search': ['react-hot-loader/patch', './src/js']
     },
     target: 'web',
     output: {
@@ -33,7 +33,10 @@ module.exports = (_, argv) => {
       minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})]
     },
     resolve: {
-      extensions: ['.webpack.js', '.web.js', '.js', '.jsx', '.css']
+      extensions: ['.webpack.js', '.web.js', '.js', '.jsx', '.css'],
+      alias: {
+        'react-dom': '@hot-loader/react-dom'
+      }
     },
     module: {
       rules: [
@@ -68,7 +71,8 @@ module.exports = (_, argv) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        APP_VERSION: JSON.stringify(packageJson.version)
+        APP_VERSION: JSON.stringify(packageJson.version),
+        NODE_ENV: JSON.stringify('development')
       }),
       new HtmlWebpackPlugin({
         template: './src/html/index.html',
