@@ -1,0 +1,46 @@
+:root {
+  --cell-dimensions: 25px;
+  --cell-count: 4;
+  --border-width: 1px;
+  --border-color: black;
+  --background-selected: yellow;
+}
+
+.container {
+}
+
+.game {
+  display: flex;
+  justify-content: center;
+}
+
+.header {
+  color: green;
+}
+
+.board {
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: var(--border-width) 0 0 var(--border-width);
+  width: calc((var(--cell-count) * var(--cell-dimensions)));
+}
+
+.cell {
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 0 var(--border-width) var(--border-width) 0;
+  display: inline-block;
+  height: calc(var(--cell-dimensions) - var(--border-width));
+  width: calc(var(--cell-dimensions) - var(--border-width));
+  text-align: center;
+  text-transform: uppercase;
+  line-height: calc(var(--cell-dimensions));
+}
+
+.word-list {
+  columns: 2;
+}
+
+.selected {
+  background-color: var(--background-selected);
+}

@@ -21,7 +21,7 @@ module.exports = (_, argv) => {
       port: 9000
     },
     entry: {
-      'word-search': ['react-hot-loader/patch', './src/js']
+      'word-search': ['react-hot-loader/patch', './components']
     },
     target: 'web',
     output: {
@@ -33,7 +33,7 @@ module.exports = (_, argv) => {
       minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})]
     },
     resolve: {
-      extensions: ['.webpack.js', '.web.js', '.js', '.jsx', '.css'],
+      extensions: ['.webpack.js', '.web.js', '.js', '.jsx', '.css', '.json'],
       alias: {
         'react-dom': '@hot-loader/react-dom'
       }
@@ -50,7 +50,10 @@ module.exports = (_, argv) => {
           exclude: /node_modules/,
           use: [
             {
-              loader: MiniCssExtractPlugin.loader
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                hmr: !prod
+              }
             },
             {
               loader: 'css-loader',
@@ -75,7 +78,7 @@ module.exports = (_, argv) => {
         NODE_ENV: JSON.stringify('development')
       }),
       new HtmlWebpackPlugin({
-        template: './src/html/index.html',
+        template: './html/index.html',
         filename: './index.html',
         minify: {
           collapseWhitespace: prod
