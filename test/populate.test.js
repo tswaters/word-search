@@ -20,10 +20,10 @@ describe('populate', () =>
         // prettier-ignore
         [
           ' ', ' ', 'f', 'o', 'o',
-          'q', 'b', 'b', 'a', 'r',
-          ' ', 'u', 'a', ' ', ' ',
-          ' ', ' ', 'x', 'z', ' ',
-          ' ', ' ', ' ', ' ', ' '
+          'q', ' ', 'b', ' ', ' ',
+          ' ', 'u', ' ', 'a', ' ',
+          ' ', ' ', 'x', ' ', 'r',
+          'b', 'a', 'z', ' ', ' '
         ]
       )
       assert.deepEqual(placedWords.sort(), opts.source.sort())
