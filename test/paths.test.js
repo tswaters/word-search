@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { paths } from '../lib/grid'
+import { N, S, E, W, path, prettyDir } from '../lib/grid'
 
 const sizes = {
   '3x3': {
@@ -13,14 +13,35 @@ const sizes = {
     specs: {
       'index: 0 - top left': {
         index: 0,
+        directions: [E, S, S | E],
         actual: [
           ['a', 'b', 'c'],
           ['a', 'd', 'g'],
           ['a', 'e', 'i']
         ]
       },
+      'index: 6 - bottom left': {
+        index: 6,
+        directions: [E, N, N | E],
+        actual: [
+          ['g', 'h', 'i'],
+          ['g', 'd', 'a'],
+          ['g', 'e', 'c']
+        ]
+      },
       'index 4 - middle': {
         index: 4,
+        // prettier-ignore
+        directions: [
+          W,
+          E,
+          S,
+          S | W,
+          S | E,
+          N,
+          N | W,
+          N | E
+        ],
         actual: [
           ['e', 'd'],
           ['e', 'f'],
@@ -34,6 +55,7 @@ const sizes = {
       },
       'index: 2 - top-right': {
         index: 2,
+        directions: [W, S, W | S],
         actual: [
           ['c', 'b', 'a'],
           ['c', 'f', 'i'],
@@ -42,6 +64,17 @@ const sizes = {
       },
       'index: 4 - middle': {
         index: 4,
+        // prettier-ignore
+        directions: [
+          W,
+          E,
+          S,
+          S | W,
+          S | E,
+          N,
+          N | W,
+          N | E
+        ],
         actual: [
           ['e', 'd'],
           ['e', 'f'],
@@ -68,6 +101,7 @@ const sizes = {
     specs: {
       'index 0 - top-left': {
         index: 0,
+        directions: [E, S, S | E],
         actual: [
           ['a', 'b', 'c', 'd', 'e'],
           ['a', 'f', 'k', 'p', 'u'],
@@ -76,6 +110,17 @@ const sizes = {
       },
       'index 11 - middle - all paths': {
         index: 12,
+        // prettier-ignore
+        directions: [
+          W,
+          E,
+          S,
+          S | W,
+          S | E,
+          N,
+          N | W,
+          N | E
+        ],
         actual: [
           ['m', 'l', 'k'],
           ['m', 'n', 'o'],
@@ -87,9 +132,9 @@ const sizes = {
           ['m', 'i', 'e']
         ]
       },
-
       'index 20 - bottom left': {
         index: 20,
+        directions: [E, N, N | E],
         actual: [
           ['u', 'v', 'w', 'x', 'y'],
           ['u', 'p', 'k', 'f', 'a'],
@@ -100,11 +145,20 @@ const sizes = {
   }
 }
 
-describe('grid', () =>
+describe('path', () =>
   Object.entries(sizes).forEach(([size, { xmax, board, specs }]) =>
     describe(size, () =>
-      Object.entries(specs).forEach(([name, { index, actual }]) =>
-        it(name, () => assert.deepEqual(paths({ board, xmax, index }), actual))
+      Object.entries(specs).forEach(([name, { index, actual, directions }]) =>
+        describe(name, () =>
+          directions.forEach((direction, dirIndex) =>
+            it(prettyDir(direction), () =>
+              assert.deepEqual(
+                path({ board, xmax, index, direction }),
+                actual[dirIndex]
+              )
+            )
+          )
+        )
       )
     )
   ))
