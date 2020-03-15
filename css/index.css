@@ -2,8 +2,24 @@
   --cell-dimensions: 25px;
   --cell-count: 4;
   --border-width: 1px;
+
+  --color: black;
+  --background-color: white;
   --border-color: black;
-  --background-selected: yellow;
+
+  --color-selected: white;
+  --background-selected: khaki;
+
+  --color-found: green;
+  --background-found: lightgreen;
+
+  --color-invalid: darkred;
+  --background-invalid: salmon;
+}
+
+body {
+  color: var(--color);
+  background-color: var(--background-color);
 }
 
 .container {
@@ -38,11 +54,48 @@
   line-height: calc(var(--cell-dimensions));
 }
 
+.cell.found {
+  color: var(--color-found);
+  background-color: var(--background-found);
+}
+
 .cell.selected {
+  color: var(--color-selected);
   background-color: var(--background-selected);
+}
+
+.cell.invalid {
+  color: var(--color-invalid);
+  background-color: var(--background-invalid);
+}
+
+/* prettier-ignore */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+.cell.invalid .letter {
+  display: inline-block;
+  position: relative;
+  animation: shake 0.5s linear;
 }
 
 .word-list {
   columns: 2;
 }
 
+.word-list li {
+  margin-right: 10px;
+}
+
+.word-list > .found {
+  text-decoration: line-through;
+}

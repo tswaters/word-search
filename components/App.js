@@ -15,11 +15,14 @@ import { populate } from '../lib/grid'
 const App = ({ opts: savedOpts, onUpdateOpts, APP_VERSION }) => {
   const [seed, setSeed] = useState(2)
   const [opts, setOpts] = useState(savedOpts)
+  const [foundWords, setFoundWords] = useState([])
+
 
   const handleReset = useCallback(
     newOpts => {
       setOpts(newOpts)
       onUpdateOpts(newOpts)
+      setFoundWords([])
       setSeed(Math.floor(Math.random() * 500))
     },
     [onUpdateOpts]
@@ -37,6 +40,21 @@ const App = ({ opts: savedOpts, onUpdateOpts, APP_VERSION }) => {
     [seed, opts]
   )
 
+  const checkWord = useCallback(
+    letters => {
+      const forwards = letters.join('')
+      const backwards = letters.reverse().join('')
+      const foundWord = placedWords.find(word =>
+        [forwards, backwards].includes(word)
+      )
+      if (foundWord) {
+        setFoundWords(foundWords => foundWords.concat(foundWord))
+      }
+      return foundWord
+    },
+    [placedWords]
+  )
+
   return (
     <div className={container}>
       <h1 className={header}>
@@ -44,8 +62,8 @@ const App = ({ opts: savedOpts, onUpdateOpts, APP_VERSION }) => {
       </h1>
       <Form opts={opts} onReset={handleReset} />
       <div className={game}>
-        <Board opts={opts} board={board} />
-        <WordList words={placedWords} />
+        <Board opts={opts} board={board} checkWord={checkWord} />
+        <WordList words={placedWords} foundWords={foundWords} />
       </div>
     </div>
   )
