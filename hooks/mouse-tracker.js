@@ -4,7 +4,8 @@ const useMouseTracking = ({
   opts,
   cellWidth,
   onSelectionChange,
-  onSelectionFinish
+  onSelectionFinish,
+  onSelectionAbort
 }) => {
   const start = useRef(null)
   const end = useRef(null)
@@ -49,11 +50,19 @@ const useMouseTracking = ({
     end.current = null
   }, [onSelectionFinish])
 
+  const handleMouseLeave = useCallback(() => {
+    if (start.current == null) return
+    onSelectionAbort()
+    start.current = null
+    end.current = null
+  }, [onSelectionAbort])
+
   return {
     boardRef,
     handleMouseDown,
     handleMouseMove,
-    handleMouseUp
+    handleMouseUp,
+    handleMouseLeave
   }
 }
 

@@ -13,6 +13,16 @@ const Board = ({ opts, board: initialBoard, checkWord }) => {
   const [board, setBoard] = useState(initialBoard)
   const [delayedRemoval, setDelayedRemoval] = useState(null)
 
+  const onSelectionAbort = useCallback(() => {
+    setBoard(board => {
+      return board.map(cell =>
+        cell.state & CELL_STATE.SELECTED
+          ? { ...cell, state: (cell.state ^= CELL_STATE.SELECTED) }
+          : cell
+      )
+    })
+  }, [])
+
   const onSelectionChange = useCallback(
     ({ start, end }) => {
       setBoard(board => {
@@ -75,12 +85,14 @@ const Board = ({ opts, board: initialBoard, checkWord }) => {
     boardRef,
     handleMouseDown,
     handleMouseMove,
-    handleMouseUp
+    handleMouseUp,
+    handleMouseLeave
   } = useMouseTracking({
     opts,
     cellWidth,
     onSelectionFinish,
-    onSelectionChange
+    onSelectionChange,
+    onSelectionAbort
   })
 
   useEffect(() => {
@@ -97,6 +109,7 @@ const Board = ({ opts, board: initialBoard, checkWord }) => {
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
       className={boardClassName}
     >
       {board.map((cell, index) => (
