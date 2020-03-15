@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback, memo } from 'react'
 
 import { board as boardType, opts as optsType } from './_types'
 import { board as boardClassName } from '../css/index'
-import { between } from '../lib/grid'
+import { between, CELL_STATE } from '../lib/grid'
 import { useMouseTracking } from '../hooks/mouse-tracker'
-import Cell, { CELL_STATE } from './Cell'
+import Cell from './Cell'
 
 const cellWidth = 25
 

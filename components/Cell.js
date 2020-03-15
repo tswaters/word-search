@@ -2,17 +2,8 @@ import React, { memo, useMemo } from 'react'
 import { cell as cellType } from './_types'
 import { cell as cellClassName, selected as selectedClass } from '../css/index'
 
-export const CELL_STATE = {
-  SELECTED: 1 << 2,
-  NONE: 1
-}
+import { CELL_STATE } from '../lib/grid'
 
-export const prettyState = dir => {
-  const vals = []
-  if (dir & CELL_STATE.SELECTED) vals.push('selected')
-  if (dir & CELL_STATE.NONE) vals.push('none')
-  return vals.join(', ')
-}
 const Cell = ({ cell }) => {
   const { letter, state } = cell
 
