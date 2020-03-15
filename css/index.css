@@ -19,6 +19,7 @@
 }
 
 .board {
+  user-select: none;
   border-style: solid;
   border-color: var(--border-color);
   border-width: var(--border-width) 0 0 var(--border-width);
@@ -37,10 +38,11 @@
   line-height: calc(var(--cell-dimensions));
 }
 
+.cell.selected {
+  background-color: var(--background-selected);
+}
+
 .word-list {
   columns: 2;
 }
 
-.selected {
-  background-color: var(--background-selected);
-}

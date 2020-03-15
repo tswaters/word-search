@@ -1,8 +1,8 @@
-import { arrayOf, shape, number, string, bool } from 'prop-types'
+import { arrayOf, shape, number, string } from 'prop-types'
 
 export const cell = shape({
-  letter: string.isRequired,
-  selected: bool
+  letter: string,
+  state: number.isRequired
 })
 
 export const board = arrayOf(cell)
