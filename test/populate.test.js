@@ -19,11 +19,11 @@ describe('populate', () =>
         board.map(x => (x.letter ? x.letter : ' ')),
         // prettier-ignore
         [
-          ' ', 'f', ' ', ' ', ' ',
-          'b', 'o', 'b', ' ', ' ',
-          'a', 'o', 'x', 'a', ' ',
-          'r', 'u', ' ', ' ', 'z',
-          'q', ' ', ' ', ' ', ' '
+          ' ', ' ', ' ', ' ', ' ',
+          'b', ' ', 'b', 'f', ' ',
+          'a', ' ', 'a', 'o', ' ',
+          'r', ' ', 'z', 'o', ' ',
+          'q', 'u', 'x', ' ', ' '
         ]
       )
       assert.deepEqual(placedWords.sort(), opts.source.sort())
