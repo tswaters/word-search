@@ -1,15 +1,6 @@
 import assert from 'assert'
 import { between } from '../lib/grid'
 
-/*
-
-        { index: 0, actual: [0, 0] }, // top-left
-        { index: 4, actual: [4, 0] }, // top-right
-        { index: 12, actual: [2, 2] }, // middle
-        { index: 20, actual: [0, 4] }, // bottom-left
-        { index: 24, actual: [4, 4] } // bottom-right
-*/
-
 describe('between', () => {
   const tests = [
     {

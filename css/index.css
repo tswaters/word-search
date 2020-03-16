@@ -7,13 +7,13 @@
   --background-color: white;
   --border-color: black;
 
-  --color-selected: white;
+  --color-selected: black;
   --background-selected: khaki;
 
-  --color-found: green;
-  --background-found: lightgreen;
+  --color-found: blue;
+  --background-found: lightblue;
 
-  --color-invalid: darkred;
+  --color-invalid: brown;
   --background-invalid: salmon;
 }
 

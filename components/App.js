@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { hot } from 'react-hot-loader/root'
 import { string, func } from 'prop-types'
 import { opts as optsType } from './_types'
@@ -17,6 +17,9 @@ const App = ({ opts: savedOpts, onUpdateOpts, APP_VERSION }) => {
   const [opts, setOpts] = useState(savedOpts)
   const [foundWords, setFoundWords] = useState([])
 
+  useEffect(() => {
+    document.documentElement.style.setProperty('--cell-count', opts.xmax)
+  }, [opts])
 
   const handleReset = useCallback(
     newOpts => {

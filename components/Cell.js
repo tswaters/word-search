@@ -10,9 +10,7 @@ import {
 
 import { CELL_STATE } from '../lib/grid'
 
-const Cell = ({ cell }) => {
-  const { letter, state } = cell
-
+const Cell = ({ cell: { letter, state } }) => {
   const className = useMemo(() => {
     const classes = [cellClassName]
     if (state & CELL_STATE.SELECTED) classes.push(selectedClass)
