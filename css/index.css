@@ -17,6 +17,21 @@
   --background-invalid: salmon;
 }
 
+:root .dark-mode {
+  --color: gray;
+  --background-color: black;
+  --border-color: gray;
+
+  --color-selected: gray;
+  --background-selected: khaki;
+
+  --color-found: blue;
+  --background-found: lightblue;
+
+  --color-invalid: brown;
+  --background-invalid: salmon;
+}
+
 body {
   color: var(--color);
   background-color: var(--background-color);

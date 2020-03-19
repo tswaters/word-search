@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { hot } from 'react-hot-loader/root'
-import { string, func, object } from 'prop-types'
+import { string } from 'prop-types'
 
 import { container, header, game } from '../css/index'
 import Form from './Form'
@@ -10,24 +10,30 @@ import WordList from './WordList'
 import * as words from '../dict'
 import { random } from '../lib/random'
 import { populate } from '../lib/grid'
+import { LightSwitch } from './LightSwitch'
+import { useStorage } from '../hooks/storage'
 
-const App = ({ opts: savedOpts, onUpdateOpts, APP_VERSION }) => {
+const App = ({ APP_VERSION }) => {
   const [seed, setSeed] = useState(2)
-  const [opts, setOpts] = useState(savedOpts)
+  const [opts, setOpts] = useStorage('wordSearch', {
+    seed: 2,
+    xmax: 15,
+    ymax: 15,
+    wordSet: 'space'
+  })
   const [foundWords, setFoundWords] = useState([])
 
   useEffect(() => {
     document.documentElement.style.setProperty('--cell-count', opts.xmax)
-  }, [opts])
+  }, [opts.xmax])
 
   const handleReset = useCallback(
     newOpts => {
       setOpts(newOpts)
-      onUpdateOpts(newOpts)
       setFoundWords([])
       setSeed(Math.floor(Math.random() * 500))
     },
-    [onUpdateOpts]
+    [setOpts]
   )
 
   const { board, placedWords } = useMemo(
@@ -39,7 +45,7 @@ const App = ({ opts: savedOpts, onUpdateOpts, APP_VERSION }) => {
         source: words[opts.wordSet],
         fill: true
       }),
-    [seed, opts]
+    [seed, opts.xmax, opts.ymax, opts.wordSet]
   )
 
   const checkWord = useCallback(
@@ -63,6 +69,7 @@ const App = ({ opts: savedOpts, onUpdateOpts, APP_VERSION }) => {
         Word Search v{APP_VERSION} Game#: {seed}
       </h1>
       <Form opts={opts} onReset={handleReset} />
+      <LightSwitch />
       <div className={game}>
         <Board opts={opts} board={board} checkWord={checkWord} />
         <WordList words={placedWords} foundWords={foundWords} />
@@ -72,9 +79,7 @@ const App = ({ opts: savedOpts, onUpdateOpts, APP_VERSION }) => {
 }
 
 App.propTypes = {
-  APP_VERSION: string.isRequired,
-  onUpdateOpts: func.isRequired,
-  opts: object.isRequired
+  APP_VERSION: string.isRequired
 }
 
 export default hot(App)
