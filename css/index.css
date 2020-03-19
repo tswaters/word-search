@@ -40,13 +40,51 @@ body {
 .container {
 }
 
+.menu {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+}
+
+.button {
+  width: 4em;
+  height: 2em;
+  margin: 0.25em;
+  display: inline-block;
+  text-align: center;
+  color: var(--color);
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+}
+
+form {
+  display: inline-block;
+}
+
+.form-group {
+  margin-bottom: 1em;
+  display: inline-block;
+}
+
+.form-group > input[type='number'] {
+  width: 2.5em;
+}
+
+.form-group > select,
+.form-group > input[type='number'],
+.form-group > label {
+  margin-right: 0.5em;
+}
+
 .game {
+  top: 2.5em;
+  position: relative;
   display: flex;
   justify-content: center;
 }
 
 .header {
-  color: green;
+  display: none;
 }
 
 .board {
@@ -103,12 +141,13 @@ body {
   animation: shake 0.5s linear;
 }
 
-.word-list {
+ul.word-list {
   columns: 2;
 }
 
-.word-list li {
-  margin-right: 10px;
+ul.word-list > li {
+  margin: 0 1em 0;
+  padding: 0;
 }
 
 .word-list > .found {

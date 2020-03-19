@@ -1,39 +1,43 @@
 import React, { useCallback, useState, useEffect, memo } from 'react'
 import { func, shape, number } from 'prop-types'
 
+import { button as buttonClass, formGroup } from '../css'
 import * as words from '../dict'
 
 const wordSets = Object.keys(words)
 
-const Form = ({ onReset, opts: initialOpts }) => {
+const Form = ({ onNewGame, opts: initialOpts }) => {
   const [opts, setOpts] = useState(initialOpts)
 
-  useEffect(() => setOpts(initialOpts), [initialOpts])
+  useEffect(() => {
+    setOpts(initialOpts)
+  }, [initialOpts])
 
-  const handleReset = useCallback(
+  const handleSubmit = useCallback(
     e => {
       e.preventDefault()
-      let { xmax, ymax, wordSet } = opts
-      xmax = parseInt(xmax)
-      ymax = parseInt(ymax)
-      if (Number.isNaN(xmax)) xmax = initialOpts.xmax
-      if (Number.isNaN(ymax)) ymax = initialOpts.ymax
-      const newOpts = { xmax, ymax, wordSet }
-      setOpts(newOpts)
-      onReset(newOpts)
+      onNewGame(opts)
     },
-    [onReset, opts, initialOpts.xmax, initialOpts.ymax]
+    [onNewGame, opts]
   )
 
-  const handleUpdateXmax = useCallback(
-    e => setOpts({ ...opts, xmax: e.target.value }),
-    [opts]
-  )
+  const handleUpdateYmax = useCallback(e => {
+    e.persist()
+    setOpts(opts => {
+      let input = parseInt(e.target.value, 10)
+      if (Number.isNaN(input)) return opts
+      return { ...opts, ymax: input }
+    })
+  }, [])
 
-  const handleUpdateYmax = useCallback(
-    e => setOpts({ ...opts, ymax: e.target.value }),
-    [opts]
-  )
+  const handleUpdateXmax = useCallback(e => {
+    e.persist()
+    setOpts(opts => {
+      let input = parseInt(e.target.value, 10)
+      if (Number.isNaN(input)) return opts
+      return { ...opts, xmax: input }
+    })
+  }, [])
 
   const handleUpdateWordset = useCallback(
     e => setOpts({ ...opts, wordSet: e.target.value }),
@@ -41,8 +45,8 @@ const Form = ({ onReset, opts: initialOpts }) => {
   )
 
   return (
-    <form onSubmit={handleReset}>
-      <div>
+    <form onSubmit={handleSubmit}>
+      <div className={formGroup}>
         <label htmlFor="wordSet">word set</label>
         <select
           id="wordSet"
@@ -57,33 +61,49 @@ const Form = ({ onReset, opts: initialOpts }) => {
           ))}
         </select>
       </div>
-      <div>
-        <label htmlFor="xmax">xmax</label>
+      <div className={formGroup}>
+        <label htmlFor="xmax">width</label>
         <input
           value={opts.xmax}
-          type="text"
+          type="number"
+          width={1}
+          min={5}
+          max={30}
+          step={1}
           name="xmax"
           id="xmax"
+          aria-label="xmax"
           onChange={handleUpdateXmax}
         />
       </div>
-      <div>
-        <label htmlFor="ymax">ymax</label>
+      <div className={formGroup}>
+        <label htmlFor="ymax">height</label>
         <input
           value={opts.ymax}
-          type="text"
+          type="number"
+          min={5}
+          max={30}
+          step={1}
           name="ymax"
           id="ymax"
+          aria-label="ymax"
           onChange={handleUpdateYmax}
         />
       </div>
-      <button type="submit">Reset</button>
+      <button
+        className={buttonClass}
+        type="submit"
+        title="New Game"
+        aria-label="New Game"
+      >
+        {'🔄︎'}
+      </button>
     </form>
   )
 }
 
 Form.propTypes = {
-  onReset: func.isRequired,
+  onNewGame: func.isRequired,
   opts: shape({
     xmax: number.isRequired,
     ymax: number.isRequired

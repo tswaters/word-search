@@ -2,10 +2,11 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { hot } from 'react-hot-loader/root'
 import { string } from 'prop-types'
 
-import { container, header, game } from '../css/index'
+import { container, menu, header, game } from '../css/index'
 import Form from './Form'
 import Board from './Board'
 import WordList from './WordList'
+import ButtonToggle from './ButtonToggle'
 
 import * as words from '../dict'
 import { random } from '../lib/random'
@@ -27,7 +28,7 @@ const App = ({ APP_VERSION }) => {
     document.documentElement.style.setProperty('--cell-count', opts.xmax)
   }, [opts.xmax])
 
-  const handleReset = useCallback(
+  const handleNewGame = useCallback(
     newOpts => {
       setOpts(newOpts)
       setFoundWords([])
@@ -65,11 +66,16 @@ const App = ({ APP_VERSION }) => {
 
   return (
     <div className={container}>
-      <h1 className={header}>
-        Word Search v{APP_VERSION} Game#: {seed}
-      </h1>
-      <Form opts={opts} onReset={handleReset} />
-      <LightSwitch />
+      <h1 className={header}>Word Search</h1>
+      <div className={menu}>
+        <ButtonToggle icon={['☰︎']} label={['Open Menu']}>
+          <Form opts={opts} onNewGame={handleNewGame} />
+        </ButtonToggle>
+        <LightSwitch />
+        <ButtonToggle icon={['❓︎']} label={['About']}>
+          version: {APP_VERSION} game: {seed}
+        </ButtonToggle>
+      </div>
       <div className={game}>
         <Board opts={opts} board={board} checkWord={checkWord} />
         <WordList words={placedWords} foundWords={foundWords} />

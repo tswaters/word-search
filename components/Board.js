@@ -27,7 +27,6 @@ const Board = ({ opts, board: initialBoard, checkWord }) => {
   // - abort -- mouse moved outside the container
   // - select -- mouse moves over new cells
   // - finish -- mouse-up is pressed
-
   const {
     boardRef,
     handleMouseDown,
