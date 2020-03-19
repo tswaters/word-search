@@ -52,8 +52,8 @@ const ButtonToggle = ({
 
 ButtonToggle.propTypes = {
   initial: bool,
-  icon: arrayOf([string, string]),
-  label: arrayOf([string, string]),
+  icon: arrayOf(string),
+  label: arrayOf(string),
   children: oneOfType([array, node]),
   onToggle: func,
   esc: bool
