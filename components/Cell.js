@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from 'react'
-import { cell as cellType } from './_types'
+import { shape, string, number } from 'prop-types'
+
 import {
   cell as cellClassName,
   found as foundClass,
@@ -27,7 +28,10 @@ const Cell = ({ cell: { letter, state } }) => {
 }
 
 Cell.propTypes = {
-  cell: cellType.isRequired
+  cell: shape({
+    letter: string,
+    state: number.isRequired
+  }).isRequired
 }
 
 export { Cell }

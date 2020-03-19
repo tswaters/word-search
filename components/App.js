@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { hot } from 'react-hot-loader/root'
-import { string, func } from 'prop-types'
-import { opts as optsType } from './_types'
+import { string, func, object } from 'prop-types'
 
 import { container, header, game } from '../css/index'
 import Form from './Form'
@@ -75,7 +74,7 @@ const App = ({ opts: savedOpts, onUpdateOpts, APP_VERSION }) => {
 App.propTypes = {
   APP_VERSION: string.isRequired,
   onUpdateOpts: func.isRequired,
-  opts: optsType.isRequired
+  opts: object.isRequired
 }
 
 export default hot(App)

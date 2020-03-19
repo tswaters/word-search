@@ -1,7 +1,5 @@
 import React, { memo } from 'react'
-import { func } from 'prop-types'
-
-import { board as boardType, opts as optsType } from './_types'
+import { array, object, func } from 'prop-types'
 import { board as boardClassName } from '../css/index'
 import { useMouseTracking } from '../hooks/mouse-tracker'
 import { useBoardState } from '../hooks/board-logic'
@@ -61,8 +59,8 @@ const Board = ({ opts, board: initialBoard, checkWord }) => {
 }
 
 Board.propTypes = {
-  opts: optsType.isRequired,
-  board: boardType.isRequired,
+  opts: object.isRequired,
+  board: array.isRequired,
   checkWord: func.isRequired
 }
 
