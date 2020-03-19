@@ -1,11 +1,11 @@
 import { useState, useCallback, useRef } from 'react'
 
 const useMouseTracking = ({
-  opts,
+  opts: { xmax },
   cellWidth,
-  onSelectionChange,
-  onSelectionFinish,
-  onSelectionAbort
+  change,
+  finish,
+  abort
 }) => {
   const start = useRef(null)
   const end = useRef(null)
@@ -20,10 +20,10 @@ const useMouseTracking = ({
       const { x, y } = boardNode.getBoundingClientRect()
       return (
         Math.floor((e.clientX - x) / cellWidth) +
-        Math.floor((e.clientY - y) / cellWidth) * opts.xmax
+        Math.floor((e.clientY - y) / cellWidth) * xmax
       )
     },
-    [opts, boardNode, cellWidth]
+    [xmax, boardNode, cellWidth]
   )
 
   const handleMouseDown = useCallback(
@@ -39,23 +39,23 @@ const useMouseTracking = ({
       const newEnd = getPosition(e)
       if (newEnd === end.current) return
       end.current = newEnd
-      onSelectionChange({ start: start.current, end: end.current })
+      change({ start: start.current, end: end.current })
     },
-    [getPosition, onSelectionChange]
+    [getPosition, change]
   )
 
   const handleMouseUp = useCallback(() => {
-    onSelectionFinish({ start: start.current, end: end.current })
+    finish({ start: start.current, end: end.current })
     start.current = null
     end.current = null
-  }, [onSelectionFinish])
+  }, [finish])
 
   const handleMouseLeave = useCallback(() => {
     if (start.current == null) return
-    onSelectionAbort()
+    abort()
     start.current = null
     end.current = null
-  }, [onSelectionAbort])
+  }, [abort])
 
   return {
     boardRef,

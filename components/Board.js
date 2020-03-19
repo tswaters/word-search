@@ -1,46 +1,34 @@
-import React, { memo, useState, useEffect, useCallback } from 'react'
+import React, { memo } from 'react'
 import { func } from 'prop-types'
 
 import { board as boardType, opts as optsType } from './_types'
 import { board as boardClassName } from '../css/index'
-import { between, CELL_STATE } from '../lib/grid'
 import { useMouseTracking } from '../hooks/mouse-tracker'
+import { useBoardState } from '../hooks/board-logic'
+
 import Cell from './Cell'
 
 const cellWidth = 25
 
 const Board = ({ opts, board: initialBoard, checkWord }) => {
-  // reload the board if we get a new one from props
-  const [board, setBoard] = useState(initialBoard)
-  useEffect(() => {
-    setBoard(initialBoard)
-  }, [initialBoard])
+  // infer the board's state by using the boardState hook
+  // this handles updating the array with new values based upon the mouse conditions below
+  // we'll get back board which is the latest state value
+  const { board, change, finish, abort } = useBoardState({
+    initialBoard,
+    opts,
+    checkWord
+  })
 
-  // removes a flag after a period of time
-  // this is used to remove `invalid` after a shake transition
-  // if any of the cells have the defined flag, remove it.
-
-  const [delayedRemoval, setDelayedRemoval] = useState(null)
-  useEffect(() => {
-    if (delayedRemoval == null) return
-    const tid = setTimeout(() => {
-      setDelayedRemoval(null)
-      setBoard(board =>
-        board.map(cell =>
-          cell.state & delayedRemoval
-            ? { ...cell, state: cell.state & ~delayedRemoval }
-            : cell
-        )
-      )
-    }, 500)
-    return () => clearTimeout(tid)
-  }, [delayedRemoval])
-
-  // invoke the mouse tracking hook
+  // useMouseTracking watches the mouse after mousedown
   // it gives us a ref/mouse handlers to attach, and we give it what happens when user interacts with the board.
-  // each of these receives `start` and `end` which are two indexes between the board array
-  // there's a grid utility to turn this into the array of cells between those two indexes
-  // in practice, we mutate the cells returned somehow, adding/removing bit flags (selected, found, invalid 0 (none))
+  // each function receives :
+  // - `start`: the indexes at which the mouse down started
+  // - `end`: the current position.
+  // it will invoke a series of functions (finish, select, abort) when conditions arise:
+  // - abort -- mouse moved outside the container
+  // - select -- mouse moves over new cells
+  // - finish -- mouse-up is pressed
 
   const {
     boardRef,
@@ -51,57 +39,9 @@ const Board = ({ opts, board: initialBoard, checkWord }) => {
   } = useMouseTracking({
     opts,
     cellWidth,
-
-    // need to set all selected cells on selection finish
-    // remove SELECTED flag and set either INVALID or FOUND
-    onSelectionFinish: useCallback(
-      ({ start, end }) => {
-        setBoard(board => {
-          const cells = between({ board, xmax: opts.xmax - 1, start, end })
-          const indexes = cells.map(cell => cell.index)
-          const foundWord = checkWord(cells.map(cell => cell.letter))
-          if (!foundWord) setDelayedRemoval(CELL_STATE.INVALID)
-          const f = foundWord ? CELL_STATE.FOUND : CELL_STATE.INVALID
-          return board.map((cell, index) =>
-            indexes.includes(index)
-              ? { ...cell, state: (cell.state & ~CELL_STATE.SELECTED) | f }
-              : cell
-          )
-        })
-      },
-      [opts, checkWord]
-    ),
-
-    // use xor to figure out if we need to flip the SELECTED bit.
-    // this is - (match and notHasFlag) OR (notMatch and hasFlag)
-    // javascript needs numbers for the XOR operator, so wrap in Number
-    onSelectionChange: useCallback(
-      ({ start, end }) => {
-        setBoard(board => {
-          const cells = between({ board, xmax: opts.xmax - 1, start, end })
-          const indexes = cells.map(cell => cell.index)
-          return board.map((cell, index) =>
-            Number(indexes.includes(index)) ^
-            Number(Boolean(cell.state & CELL_STATE.SELECTED))
-              ? { ...cell, state: (cell.state ^= CELL_STATE.SELECTED) }
-              : cell
-          )
-        })
-      },
-      [opts]
-    ),
-
-    // need to change any cell that has selected flag
-    // remove the selected flag!
-    onSelectionAbort: useCallback(() => {
-      setBoard(board =>
-        board.map(cell =>
-          cell.state & CELL_STATE.SELECTED
-            ? { ...cell, state: (cell.state ^= CELL_STATE.SELECTED) }
-            : cell
-        )
-      )
-    }, [])
+    change,
+    finish,
+    abort
   })
 
   return (
