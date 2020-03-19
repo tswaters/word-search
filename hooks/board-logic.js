@@ -33,7 +33,7 @@ const useBoardState = ({ opts: { xmax }, initialBoard, checkWord }) => {
   const change = useCallback(
     ({ start, end }) =>
       setBoard(board => {
-        const cells = between({ board, xmax: xmax - 1, start, end })
+        const cells = between({ board, xmax, start, end })
         const indexes = cells.map(cell => cell.index)
         return board.map((cell, index) =>
           Number(indexes.includes(index)) ^
@@ -51,7 +51,7 @@ const useBoardState = ({ opts: { xmax }, initialBoard, checkWord }) => {
   const finish = useCallback(
     ({ start, end }) =>
       setBoard(board => {
-        const cells = between({ board, xmax: xmax - 1, start, end })
+        const cells = between({ board, xmax, start, end })
         const indexes = cells.map(cell => cell.index)
         const foundWord = checkWord(cells.map(cell => cell.letter))
         if (!foundWord) setDelayedRemoval(CELL_STATE.INVALID)

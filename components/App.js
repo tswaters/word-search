@@ -40,8 +40,8 @@ const App = ({ APP_VERSION }) => {
   const { board, placedWords } = useMemo(
     () =>
       populate({
-        xmax: opts.xmax - 1,
-        ymax: opts.ymax - 1,
+        xmax: opts.xmax,
+        ymax: opts.ymax,
         rnd: random(seed),
         source: words[opts.wordSet],
         fill: true
