@@ -1,22 +1,26 @@
 import React, { memo } from 'react'
-import { arrayOf, string } from 'prop-types'
+import { arrayOf, string, bool } from 'prop-types'
 
 import { wordList, found as foundWordClass } from '../css'
 
-const WordList = ({ words, foundWords }) => {
-  const getClassname = word => {
-    if (foundWords.includes(word)) {
-      return foundWordClass
-    }
-    return ''
-  }
+const Word = ({ word, found }) => {
+  return (
+    <li className={found ? foundWordClass : ''}>
+      <span>{word}</span>
+    </li>
+  )
+}
 
+Word.propTypes = {
+  word: string,
+  found: bool
+}
+
+const WordList = ({ words, foundWords }) => {
   return (
     <ul className={wordList}>
       {words.map(word => (
-        <li className={getClassname(word)} key={word}>
-          {word}
-        </li>
+        <Word key={word} word={word} found={foundWords.includes(word)} />
       ))}
     </ul>
   )

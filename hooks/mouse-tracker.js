@@ -1,12 +1,6 @@
 import { useState, useCallback, useRef } from 'react'
 
-const useMouseTracking = ({
-  opts: { xmax },
-  cellWidth,
-  change,
-  finish,
-  abort
-}) => {
+const useMouseTracking = ({ opts: { xmax, ymax }, change, finish, abort }) => {
   const start = useRef(null)
   const end = useRef(null)
 
@@ -17,13 +11,14 @@ const useMouseTracking = ({
 
   const getPosition = useCallback(
     e => {
-      const { x, y } = boardNode.getBoundingClientRect()
-      return (
-        Math.floor((e.clientX - x) / cellWidth) +
-        Math.floor((e.clientY - y) / cellWidth) * xmax
-      )
+      const { x, y, width, height } = boardNode.getBoundingClientRect()
+      const cellWidth = width / xmax
+      const cellHeight = height / ymax
+      const cellX = Math.floor((e.clientX - x) / cellWidth)
+      const cellY = Math.floor((e.clientY - y) / cellHeight)
+      return cellX + cellY * xmax
     },
-    [xmax, boardNode, cellWidth]
+    [xmax, ymax, boardNode]
   )
 
   const handleMouseDown = useCallback(

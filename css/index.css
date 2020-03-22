@@ -1,5 +1,7 @@
 :root {
   --cell-dimensions: 25px;
+  --grid-xmax: 15;
+  --grid-ymax: 15;
   --cell-count: 4;
   --border-width: 1px;
 
@@ -35,15 +37,12 @@
 body {
   color: var(--color);
   background-color: var(--background-color);
+  font-family: sans-serif;
 }
 
 .container {
-}
-
-.menu {
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .button {
@@ -62,7 +61,6 @@ form {
 }
 
 .form-group {
-  margin-bottom: 1em;
   display: inline-block;
 }
 
@@ -77,10 +75,10 @@ form {
 }
 
 .game {
-  top: 2.5em;
-  position: relative;
-  display: flex;
-  justify-content: center;
+}
+
+.menu {
+  text-align: right;
 }
 
 .header {
@@ -89,22 +87,16 @@ form {
 
 .board {
   user-select: none;
-  border-style: solid;
-  border-color: var(--border-color);
-  border-width: var(--border-width) 0 0 var(--border-width);
-  width: calc((var(--cell-count) * var(--cell-dimensions)));
+  display: grid;
+  grid-template-columns: repeat(var(--grid-xmax), 1fr);
+  grid-template-rows: repeat(var(--grid-ymax), 1fr);
 }
 
 .cell {
-  border-style: solid;
-  border-color: var(--border-color);
-  border-width: 0 var(--border-width) var(--border-width) 0;
-  display: inline-block;
-  height: calc(var(--cell-dimensions) - var(--border-width));
-  width: calc(var(--cell-dimensions) - var(--border-width));
+  padding: 0.25em;
+  border: var(--border-width) solid var(--border-color);
   text-align: center;
   text-transform: uppercase;
-  line-height: calc(var(--cell-dimensions));
 }
 
 .cell.found {
@@ -135,6 +127,10 @@ form {
   }
 }
 
+.letter {
+  font-size: 2vw;
+}
+
 .cell.invalid .letter {
   display: inline-block;
   position: relative;
@@ -142,14 +138,28 @@ form {
 }
 
 ul.word-list {
-  columns: 2;
 }
 
 ul.word-list > li {
-  margin: 0 1em 0;
-  padding: 0;
+  display: inline;
 }
 
-.word-list > .found {
+ul.word-list > li > span {
+  display: inline-block;
+  border: 1px solid white;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  margin: 0.25em;
+  color: var(--color);
+  background-color: var(--background-color);
+  font: normal 1em sans-serif;
+}
+
+ul.word-list > li > .cheat:hover {
+  color: var(--color-cheat);
+  background-color: var(--background-cheat);
+}
+
+.word-list > .found span {
   text-decoration: line-through;
 }

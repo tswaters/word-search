@@ -25,8 +25,9 @@ const App = ({ APP_VERSION }) => {
   const [foundWords, setFoundWords] = useState([])
 
   useEffect(() => {
-    document.documentElement.style.setProperty('--cell-count', opts.xmax)
-  }, [opts.xmax])
+    document.documentElement.style.setProperty('--grid-xmax', opts.xmax)
+    document.documentElement.style.setProperty('--grid-ymax', opts.ymax)
+  }, [opts.xmax, opts.ymax])
 
   const handleNewGame = useCallback(
     newOpts => {
