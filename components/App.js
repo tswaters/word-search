@@ -54,15 +54,23 @@ const App = ({ APP_VERSION }) => {
 
   const checkWord = useCallback(
     letters => {
-      const forwards = letters.join('')
-      const backwards = letters.reverse().join('')
-      const foundWord = availableWords.find(word =>
-        [forwards, backwards].includes(word)
+      const possibilities = [letters.join(''), letters.reverse().join('')]
+      const newWords = availableWords.filter(word =>
+        possibilities.some(p => p.includes(word))
       )
-      if (foundWord) {
-        setFoundWords(foundWords => foundWords.concat(foundWord))
+
+      let words = []
+      const theWord = newWords.find(word => word.length === letters.length)
+      if (theWord != null) {
+        words = newWords.filter(
+          word => word === theWord.length || theWord.includes(word)
+        )
       }
-      return foundWord
+
+      if (words.length > 0)
+        setFoundWords(foundWords => foundWords.concat(words))
+
+      return words
     },
     [availableWords]
   )
