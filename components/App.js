@@ -17,7 +17,7 @@ import { useStorage } from '../hooks/storage'
 const App = ({ APP_VERSION }) => {
   const [opts, setOpts] = useStorage('wordSearch', {
     seed: 2,
-    xmax: 15,
+    xmax: 20,
     ymax: 15,
     wordSet: 'space'
   })
