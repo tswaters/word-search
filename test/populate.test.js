@@ -4,8 +4,8 @@ import { populate } from '../lib/grid'
 
 const sizes = {
   '5x5': {
-    xmax: 4,
-    ymax: 4,
+    xmax: 5,
+    ymax: 5,
     source: ['foo', 'bar', 'baz', 'qux'],
     rnd: random(3)
   }
@@ -19,13 +19,13 @@ describe('populate', () =>
         board.map(x => (x.letter ? x.letter : ' ')),
         // prettier-ignore
         [
-          ' ', ' ', ' ', ' ', ' ',
-          'b', ' ', 'b', 'f', ' ',
-          'a', ' ', 'a', 'o', ' ',
-          'r', ' ', 'z', 'o', ' ',
-          'q', 'u', 'x', ' ', ' '
+          ' ', 'b', 'f', ' ', ' ',
+          'q', ' ', 'a', 'o', ' ',
+          ' ', 'u', 'b', 'r', 'o',
+          ' ', ' ', 'x', 'a', ' ',
+          ' ', ' ', ' ', ' ', 'z'
         ]
       )
-      assert.deepEqual(placedWords.sort(), opts.source.sort())
+      assert.deepEqual(Object.keys(placedWords).sort(), opts.source.sort())
     })
   ))

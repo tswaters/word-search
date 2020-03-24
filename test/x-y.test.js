@@ -4,7 +4,7 @@ import { x, y, xy } from '../lib/grid'
 describe('x/y', () => {
   const tests = [
     {
-      xmax: 4,
+      xmax: 5,
       /*
         'a', 'b', 'c', 'd', 'e',
         'f', 'g', 'h', 'i', 'j',

@@ -4,7 +4,7 @@ import { between } from '../lib/grid'
 describe('between', () => {
   const tests = [
     {
-      xmax: 4,
+      xmax: 5,
       // prettier-ignore
       board: [
         'a', 'b', 'c', 'd', 'e',

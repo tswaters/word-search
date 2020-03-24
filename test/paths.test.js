@@ -3,7 +3,7 @@ import { N, S, E, W, path, prettyDir } from '../lib/grid'
 
 const sizes = {
   '3x3': {
-    xmax: 2,
+    xmax: 3,
     // prettier-ignore
     board: [
       'a', 'b', 'c',
@@ -89,7 +89,7 @@ const sizes = {
     }
   },
   '5x5': {
-    xmax: 4,
+    xmax: 5,
     // prettier-ignore
     board: [
       'a', 'b', 'c', 'd', 'e',

@@ -4,7 +4,7 @@ import { vector, N, S, E, W, prettyDir } from '../lib/grid'
 describe('get cells from start/current', () => {
   const tests = [
     {
-      xmax: 4,
+      xmax: 5,
       /*
         'a', 'b', 'c', 'd', 'e',
         'f', 'g', 'h', 'i', 'j',
