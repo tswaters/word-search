@@ -15,7 +15,6 @@ import { LightSwitch } from './LightSwitch'
 import { useStorage } from '../hooks/storage'
 
 const App = ({ APP_VERSION }) => {
-  const [seed, setSeed] = useState(2)
   const [opts, setOpts] = useStorage('wordSearch', {
     seed: 2,
     xmax: 15,
@@ -31,9 +30,8 @@ const App = ({ APP_VERSION }) => {
 
   const handleNewGame = useCallback(
     newOpts => {
-      setOpts(newOpts)
+      setOpts({ ...newOpts, seed: Math.floor(Math.random() * 500) })
       setFoundWords([])
-      setSeed(Math.floor(Math.random() * 500))
     },
     [setOpts]
   )
@@ -43,18 +41,22 @@ const App = ({ APP_VERSION }) => {
       populate({
         xmax: opts.xmax,
         ymax: opts.ymax,
-        rnd: random(seed),
+        rnd: random(opts.seed),
         source: words[opts.wordSet],
         fill: true
       }),
-    [seed, opts.xmax, opts.ymax, opts.wordSet]
+    [opts.seed, opts.xmax, opts.ymax, opts.wordSet]
   )
+
+  const availableWords = useMemo(() => Object.keys(placedWords).sort(), [
+    placedWords
+  ])
 
   const checkWord = useCallback(
     letters => {
       const forwards = letters.join('')
       const backwards = letters.reverse().join('')
-      const foundWord = placedWords.find(word =>
+      const foundWord = availableWords.find(word =>
         [forwards, backwards].includes(word)
       )
       if (foundWord) {
@@ -62,7 +64,7 @@ const App = ({ APP_VERSION }) => {
       }
       return foundWord
     },
-    [placedWords]
+    [availableWords]
   )
 
   return (
@@ -74,12 +76,17 @@ const App = ({ APP_VERSION }) => {
         </ButtonToggle>
         <LightSwitch />
         <ButtonToggle icon={['❓︎']} label={['About']}>
-          version: {APP_VERSION} game: {seed}
+          version: {APP_VERSION} game: {opts.seed}
         </ButtonToggle>
       </div>
       <div className={game}>
-        <Board opts={opts} board={board} checkWord={checkWord} />
-        <WordList words={placedWords} foundWords={foundWords} />
+        <Board
+          opts={opts}
+          board={board}
+          checkWord={checkWord}
+          placedWords={placedWords}
+        />
+        <WordList words={availableWords} foundWords={foundWords} />
       </div>
     </div>
   )

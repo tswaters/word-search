@@ -8,14 +8,15 @@ import Cell from './Cell'
 
 const cellWidth = 25
 
-const Board = ({ opts, board: initialBoard, checkWord }) => {
+const Board = ({ opts, board: initialBoard, checkWord, placedWords }) => {
   // infer the board's state by using the boardState hook
   // this handles updating the array with new values based upon the mouse conditions below
   // we'll get back board which is the latest state value
   const { board, change, finish, abort } = useBoardState({
     initialBoard,
     opts,
-    checkWord
+    checkWord,
+    placedWords
   })
 
   // useMouseTracking watches the mouse after mousedown
