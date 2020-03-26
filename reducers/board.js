@@ -1,33 +1,20 @@
-import { CELL_STATE, between } from '../lib/grid'
+import { CELL_STATE } from '../lib/grid'
 
 const RESET_BOARD = '@@board/reest'
 const DISABLE_FLAG = '@@board/disable-flag'
-const SET_FLAG = '@@board/set-flag'
+const SET_FOUND = '@@board/set-found'
 const SELECTED = '@@board/selected'
 const FINISHED = '@@board/finished'
 
-export const resetBoard = ({ board }) => ({ type: RESET_BOARD, board })
+export const resetBoard = opts => ({ type: RESET_BOARD, ...opts })
 
-export const disableFlag = ({ flag }) => ({ type: DISABLE_FLAG, flag })
+export const disableFlag = opts => ({ type: DISABLE_FLAG, ...opts })
 
-export const setFlag = ({ indexes, flag }) => ({
-  type: SET_FLAG,
-  indexes,
-  flag
-})
+export const setFound = opts => ({ type: SET_FOUND, ...opts })
 
-export const setSelected = ({ xmax, start, end }) => ({
-  type: SELECTED,
-  xmax,
-  start,
-  end
-})
+export const setSelected = opts => ({ type: SELECTED, ...opts })
 
-export const setFinished = ({ indexes, flag }) => ({
-  type: FINISHED,
-  indexes,
-  flag
-})
+export const setFinished = opts => ({ type: FINISHED, ...opts })
 
 const reducers = {
   // reset state from above
@@ -39,35 +26,44 @@ const reducers = {
       cell.state & flag ? { ...cell, state: cell.state & ~flag } : cell
     ),
 
-  // set the specified on the specified indexes
-  [SET_FLAG]: (state, { indexes, flag }) =>
+  // sets found on all defined indexes
+  [SET_FOUND]: (state, { indexes }) =>
     state.map((cell, index) =>
-      indexes.includes(index) ? { ...cell, state: cell.state | flag } : cell
+      indexes.includes(index)
+        ? { ...cell, state: cell.state | CELL_STATE.FOUND }
+        : cell
     ),
 
-  // use xor to figure out if we need to flip the SELECTED bit.
-  // this is - (match and notHasFlag) OR (notMatch and hasFlag)
-  // javascript needs numbers for the XOR operator, so wrap in Number
-  [SELECTED]: (state, { xmax, start, end }) => {
-    const cells = between({ board: state, xmax, start, end })
-    const indexes = cells.map(cell => cell.index)
-    return state.map((cell, index) =>
+  // use xor to figure out if the specified flag needs to be flipped.
+  // if the user drags off a selected cell, it should have it's flag flipped
+  // if the cell is a chosen ones and doesn't have the flag, it's flag should be flipped
+  // this set of conditions is XOR which I've used below. It's a more terse way of saying:
+  //  (indexes.includes(index) AND notHasFlag) OR (indexes.includes(index) AND hasFlag)
+  // in cases returning true, need to toggle the defined flag.
+  // unfortunately, while javascript can do this, it needs numbers for the XOR operator.
+  // I don't like the casting options here, and I think using `Number` and `Boolean` is more clear.
+  // Ah well, 9 lines of comments to explain should be enough to explain it to myself later.
+  [SELECTED]: (state, { indexes }) =>
+    state.map((cell, index) =>
       Number(indexes.includes(index)) ^
       Number(Boolean(cell.state & CELL_STATE.SELECTED))
         ? { ...cell, state: (cell.state ^= CELL_STATE.SELECTED) }
         : cell
-    )
-  },
+    ),
 
   // need to set all selected cells on selection finish
   // remove SELECTED flag and INVALID (if was invalid)
-  [FINISHED]: (state, { indexes, flag }) => {
-    return state.map((cell, index) =>
+  [FINISHED]: (state, { indexes, found }) =>
+    state.map((cell, index) =>
       indexes.includes(index)
-        ? { ...cell, state: (cell.state & ~CELL_STATE.SELECTED) | flag }
+        ? {
+            ...cell,
+            state:
+              (cell.state & ~CELL_STATE.SELECTED) |
+              (found ? CELL_STATE.FOUND : CELL_STATE.INVALID)
+          }
         : cell
     )
-  }
 }
 
 export default (state, action) => {

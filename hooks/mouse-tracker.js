@@ -7,7 +7,7 @@ const useMouseTracking = ({ opts: { xmax, ymax }, change, finish, abort }) => {
   // the board rect might mutate over time (changing xmax/ymax) alters css/dimensions
   // as such, need a reference to the dom node so we can call `getBoundingClientRect`
   const [boardNode, setBoardNode] = useState(null)
-  const boardRef = useCallback(domNode => domNode && setBoardNode(domNode), [])
+  const ref = useCallback(domNode => domNode && setBoardNode(domNode), [])
 
   const getPosition = useCallback(
     e => {
@@ -21,14 +21,14 @@ const useMouseTracking = ({ opts: { xmax, ymax }, change, finish, abort }) => {
     [xmax, ymax, boardNode]
   )
 
-  const handleMouseDown = useCallback(
+  const onMouseDown = useCallback(
     e => {
       start.current = end.current = getPosition(e)
     },
     [getPosition]
   )
 
-  const handleMouseMove = useCallback(
+  const onMouseMove = useCallback(
     e => {
       if (start.current == null) return
       const newEnd = getPosition(e)
@@ -39,13 +39,13 @@ const useMouseTracking = ({ opts: { xmax, ymax }, change, finish, abort }) => {
     [getPosition, change]
   )
 
-  const handleMouseUp = useCallback(() => {
+  const onMouseUp = useCallback(() => {
     finish({ start: start.current, end: end.current })
     start.current = null
     end.current = null
   }, [finish])
 
-  const handleMouseLeave = useCallback(() => {
+  const onMouseLeave = useCallback(() => {
     if (start.current == null) return
     abort()
     start.current = null
@@ -53,11 +53,11 @@ const useMouseTracking = ({ opts: { xmax, ymax }, change, finish, abort }) => {
   }, [abort])
 
   return {
-    boardRef,
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleMouseLeave
+    ref,
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+    onMouseLeave
   }
 }
 

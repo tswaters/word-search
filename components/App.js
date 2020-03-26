@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { hot } from 'react-hot-loader/root'
 import { string } from 'prop-types'
 
@@ -7,10 +7,6 @@ import Form from './Form'
 import Board from './Board'
 import WordList from './WordList'
 import ButtonToggle from './ButtonToggle'
-
-import * as words from '../dict'
-import { random } from '../lib/random'
-import { populate } from '../lib/grid'
 import { LightSwitch } from './LightSwitch'
 import { useStorage } from '../hooks/storage'
 
@@ -21,58 +17,32 @@ const App = ({ APP_VERSION }) => {
     ymax: 15,
     wordSet: 'space'
   })
-  const [foundWords, setFoundWords] = useState([])
 
-  useEffect(() => {
-    document.documentElement.style.setProperty('--grid-xmax', opts.xmax)
-    document.documentElement.style.setProperty('--grid-ymax', opts.ymax)
-  }, [opts.xmax, opts.ymax])
+  const [foundWords, setFoundWords] = useStorage('foundWords', [])
+  const [availableWords, setAvailableWords] = useState([])
 
   const handleNewGame = useCallback(
     newOpts => {
       setOpts({ ...newOpts, seed: Math.floor(Math.random() * 500) })
       setFoundWords([])
     },
-    [setOpts]
+    [setOpts, setFoundWords]
   )
 
-  const { board, placedWords } = useMemo(
-    () =>
-      populate({
-        xmax: opts.xmax,
-        ymax: opts.ymax,
-        rnd: random(opts.seed),
-        source: words[opts.wordSet],
-        fill: true
-      }),
-    [opts.seed, opts.xmax, opts.ymax, opts.wordSet]
-  )
-
-  const availableWords = useMemo(() => Object.keys(placedWords).sort(), [
-    placedWords
-  ])
-
-  const checkWord = useCallback(
-    letters => {
-      const possibilities = [letters.join(''), letters.reverse().join('')]
-      const newWords = availableWords.filter(word =>
-        possibilities.some(p => p.includes(word))
-      )
-
-      let words = []
-      const theWord = newWords.find(word => word.length === letters.length)
-      if (theWord != null) {
-        words = newWords.filter(
-          word => word === theWord.length || theWord.includes(word)
-        )
-      }
-
-      if (words.length > 0)
-        setFoundWords(foundWords => foundWords.concat(words))
-
-      return words
+  const handleFoundWords = useCallback(
+    newWords => {
+      setFoundWords(prev => {
+        const items = new Set(prev)
+        newWords.forEach(item => items.add(item))
+        return Array.from(items)
+      })
     },
-    [availableWords]
+    [setFoundWords]
+  )
+
+  const handleAvailableWord = useCallback(
+    availableWords => setAvailableWords(availableWords),
+    []
   )
 
   return (
@@ -90,9 +60,9 @@ const App = ({ APP_VERSION }) => {
       <div className={game}>
         <Board
           opts={opts}
-          board={board}
-          checkWord={checkWord}
-          placedWords={placedWords}
+          onFoundWords={handleFoundWords}
+          onAvailableWord={handleAvailableWord}
+          initialWords={foundWords}
         />
         <WordList words={availableWords} foundWords={foundWords} />
       </div>
