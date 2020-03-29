@@ -1,34 +1,24 @@
-import React, { memo } from 'react'
-import { arrayOf, string, bool } from 'prop-types'
+import React, { memo, useContext } from 'react'
 
 import { wordList, found as foundWordClass } from '../css'
+import { GameContext } from './Game'
 
-const Word = ({ word, found }) => {
-  return (
-    <li className={found ? foundWordClass : ''}>
-      <span>{word}</span>
-    </li>
-  )
-}
-
-Word.propTypes = {
-  word: string,
-  found: bool
-}
-
-const WordList = ({ words, foundWords }) => {
+const WordList = () => {
+  const { placedWords, foundWords } = useContext(GameContext)
   return (
     <ul className={wordList}>
-      {words.map(word => (
-        <Word key={word} word={word} found={foundWords.includes(word)} />
-      ))}
+      {Object.keys(placedWords)
+        .sort()
+        .map(word => (
+          <li
+            key={word}
+            className={foundWords.includes(word) ? foundWordClass : ''}
+          >
+            <span>{word}</span>
+          </li>
+        ))}
     </ul>
   )
-}
-
-WordList.propTypes = {
-  words: arrayOf(string),
-  foundWords: arrayOf(string)
 }
 
 export { WordList }

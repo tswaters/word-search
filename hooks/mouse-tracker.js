@@ -1,6 +1,9 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useContext } from 'react'
+import { GameContext } from '../components/Game'
 
-const useMouseTracking = ({ opts: { xmax, ymax }, change, finish, abort }) => {
+const useMouseTracking = ({ onChange, onFinish, onAbort }) => {
+  const { xmax, ymax } = useContext(GameContext)
+
   const start = useRef(null)
   const end = useRef(null)
 
@@ -21,43 +24,43 @@ const useMouseTracking = ({ opts: { xmax, ymax }, change, finish, abort }) => {
     [xmax, ymax, boardNode]
   )
 
-  const onMouseDown = useCallback(
+  const handleMouseDown = useCallback(
     e => {
       start.current = end.current = getPosition(e)
     },
     [getPosition]
   )
 
-  const onMouseMove = useCallback(
+  const handleMouseMove = useCallback(
     e => {
       if (start.current == null) return
       const newEnd = getPosition(e)
       if (newEnd === end.current) return
       end.current = newEnd
-      change({ start: start.current, end: end.current })
+      onChange({ start: start.current, end: end.current })
     },
-    [getPosition, change]
+    [getPosition, onChange]
   )
 
-  const onMouseUp = useCallback(() => {
-    finish({ start: start.current, end: end.current })
+  const handleMouseUp = useCallback(() => {
+    onFinish({ start: start.current, end: end.current })
     start.current = null
     end.current = null
-  }, [finish])
+  }, [onFinish])
 
-  const onMouseLeave = useCallback(() => {
+  const handleMouseLeave = useCallback(() => {
     if (start.current == null) return
-    abort()
+    onAbort()
     start.current = null
     end.current = null
-  }, [abort])
+  }, [onAbort])
 
   return {
     ref,
-    onMouseDown,
-    onMouseMove,
-    onMouseUp,
-    onMouseLeave
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    handleMouseLeave
   }
 }
 

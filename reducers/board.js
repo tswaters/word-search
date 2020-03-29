@@ -35,9 +35,9 @@ const reducers = {
     ),
 
   // use xor to figure out if the specified flag needs to be flipped.
-  // if the user drags off a selected cell, it should have it's flag flipped
-  // if the cell is a chosen ones and doesn't have the flag, it's flag should be flipped
-  // this set of conditions is XOR which I've used below. It's a more terse way of saying:
+  // * if the user drags off a selected cell, it should have it's flag flipped
+  // * if the cell is closed within index, and doesn't have the flag, it's flag should be flipped
+  // that set of conditions is XOR, which I've used below. It's a more terse way of saying:
   //  (indexes.includes(index) AND notHasFlag) OR (indexes.includes(index) AND hasFlag)
   // in cases returning true, need to toggle the defined flag.
   // unfortunately, while javascript can do this, it needs numbers for the XOR operator.
@@ -52,7 +52,7 @@ const reducers = {
     ),
 
   // need to set all selected cells on selection finish
-  // remove SELECTED flag and INVALID (if was invalid)
+  // remove SELECTED flag and add INVALID/FOUND
   [FINISHED]: (state, { indexes, found }) =>
     state.map((cell, index) =>
       indexes.includes(index)

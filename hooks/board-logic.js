@@ -4,13 +4,11 @@ import {
   useCallback,
   useState,
   useLayoutEffect,
-  useRef,
-  useMemo
+  useMemo,
+  useContext
 } from 'react'
 
-import * as allWords from '../dict'
-import { random } from '../lib/random'
-import { CELL_STATE, between, populate } from '../lib/grid'
+import { CELL_STATE, between } from '../lib/grid'
 
 import boardReducer, {
   disableFlag,
@@ -19,43 +17,36 @@ import boardReducer, {
   setSelected,
   resetBoard
 } from '../reducers/board'
+import { GameContext } from '../components/Game'
+import { useEffectAvoidInit } from './use-effect-avoid-init'
 
-const useBoardState = ({
-  opts,
-  initialWords,
-  onFoundWords,
-  onAvailableWord
-}) => {
-  const initializedRef = useRef(false)
+const useBoardState = () => {
+  const {
+    xmax,
+    ymax,
+    board: initialBoard,
+    placedWords,
+    foundWords,
+    onFoundWords
+  } = useContext(GameContext)
 
-  const { board: initialBoard, placedWords } = useMemo(
-    () =>
-      populate({
-        xmax: opts.xmax,
-        ymax: opts.ymax,
-        rnd: random(opts.seed),
-        source: allWords[opts.wordSet],
-        fill: true
-      }),
-    [opts.seed, opts.xmax, opts.ymax, opts.wordSet]
-  )
-
-  const words = useMemo(() => Object.keys(placedWords).sort(), [placedWords])
-  useEffect(() => onAvailableWord(words), [onAvailableWord, words])
+  const availableWords = useMemo(() => Object.keys(placedWords).sort(), [
+    placedWords
+  ])
 
   const [board, dispatch] = useReducer(boardReducer, initialBoard)
   const [removingInactive, setRemovingInactive] = useState(null)
 
   useEffect(() => {
-    document.documentElement.style.setProperty('--grid-xmax', opts.xmax)
-    document.documentElement.style.setProperty('--grid-ymax', opts.ymax)
-  }, [opts.xmax, opts.ymax])
+    document.documentElement.style.setProperty('--grid-xmax', xmax)
+    document.documentElement.style.setProperty('--grid-ymax', ymax)
+  }, [xmax, ymax])
 
   // fire before first render
   // take values from local storage and set board to found for these items
   useLayoutEffect(
     () => {
-      const indexes = initialWords
+      const indexes = foundWords
         .reduce((acc, word) => acc.concat(placedWords[word]), [])
         .map(cell => cell.index)
 
@@ -71,17 +62,14 @@ const useBoardState = ({
 
   // reload the board if we get a new one from new `opts` prop
   // only do this AFTER initialization.
+  // this prevents destroying our initial found values set above.
 
-  useEffect(() => {
-    if (!initializedRef.current) {
-      initializedRef.current = true
-    } else {
-      dispatch(
-        resetBoard({
-          board: initialBoard
-        })
-      )
-    }
+  useEffectAvoidInit(() => {
+    dispatch(
+      resetBoard({
+        board: initialBoard
+      })
+    )
   }, [initialBoard])
 
   // this is an effect that removes invalid cells
@@ -102,26 +90,26 @@ const useBoardState = ({
 
   // this fires when the selection changes during mousemove events.
 
-  const change = useCallback(
+  const onChange = useCallback(
     ({ start, end }) => {
-      const cells = between({ board, xmax: opts.xmax, start, end })
+      const cells = between({ board, xmax, start, end })
       dispatch(
         setSelected({
           indexes: cells.map(cell => cell.index)
         })
       )
     },
-    [opts, board]
+    [xmax, board]
   )
 
   // this fires after a selection has finished (mouseup)
 
-  const finish = useCallback(
+  const onFinish = useCallback(
     ({ start, end }) => {
-      const cells = between({ board, xmax: opts.xmax, start, end })
+      const cells = between({ board, xmax: xmax, start, end })
       const possibleWord = cells.map(cell => cell.letter)
 
-      const foundWord = words.find(checKWord =>
+      const foundWord = availableWords.find(checKWord =>
         // user is allowed to select something even if they select it backwards
         [possibleWord.join(''), possibleWord.reverse().join('')].some(
           p => p === checKWord
@@ -132,7 +120,9 @@ const useBoardState = ({
         foundWord == null
           ? []
           : // make sure to get words that are enclosed within the found word
-            words.filter(word => word === foundWord || foundWord.includes(word))
+            availableWords.filter(
+              word => word === foundWord || foundWord.includes(word)
+            )
 
       if (foundWord == null) {
         // sets a flag to reset invalid after a timeout
@@ -151,12 +141,12 @@ const useBoardState = ({
         })
       )
     },
-    [opts, board, onFoundWords, words]
+    [xmax, board, onFoundWords, availableWords]
   )
 
   // this fires after a selection abort (mouseout)
 
-  const abort = useCallback(
+  const onAbort = useCallback(
     () =>
       dispatch(
         disableFlag({
@@ -166,7 +156,7 @@ const useBoardState = ({
     []
   )
 
-  return { board, finish, change, abort }
+  return { board, onFinish, onChange, onAbort }
 }
 
 export { useBoardState }

@@ -1,13 +1,14 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { hot } from 'react-hot-loader/root'
 import { string } from 'prop-types'
 
-import { container, menu, header, game } from '../css/index'
+import { container, menu, header } from '../css/index'
+import Game from './Game'
 import Form from './Form'
 import Board from './Board'
 import WordList from './WordList'
 import ButtonToggle from './ButtonToggle'
-import { LightSwitch } from './LightSwitch'
+import LightSwitch from './LightSwitch'
 import { useStorage } from '../hooks/storage'
 
 const App = ({ APP_VERSION }) => {
@@ -18,31 +19,11 @@ const App = ({ APP_VERSION }) => {
     wordSet: 'space'
   })
 
-  const [foundWords, setFoundWords] = useStorage('foundWords', [])
-  const [availableWords, setAvailableWords] = useState([])
-
   const handleNewGame = useCallback(
     newOpts => {
       setOpts({ ...newOpts, seed: Math.floor(Math.random() * 500) })
-      setFoundWords([])
     },
-    [setOpts, setFoundWords]
-  )
-
-  const handleFoundWords = useCallback(
-    newWords => {
-      setFoundWords(prev => {
-        const items = new Set(prev)
-        newWords.forEach(item => items.add(item))
-        return Array.from(items)
-      })
-    },
-    [setFoundWords]
-  )
-
-  const handleAvailableWord = useCallback(
-    availableWords => setAvailableWords(availableWords),
-    []
+    [setOpts]
   )
 
   return (
@@ -57,15 +38,15 @@ const App = ({ APP_VERSION }) => {
           version: {APP_VERSION} game: {opts.seed}
         </ButtonToggle>
       </div>
-      <div className={game}>
-        <Board
-          opts={opts}
-          onFoundWords={handleFoundWords}
-          onAvailableWord={handleAvailableWord}
-          initialWords={foundWords}
-        />
-        <WordList words={availableWords} foundWords={foundWords} />
-      </div>
+      <Game
+        xmax={opts.xmax}
+        ymax={opts.ymax}
+        seed={opts.seed}
+        wordSet={opts.wordSet}
+      >
+        <Board />
+        <WordList />
+      </Game>
     </div>
   )
 }
