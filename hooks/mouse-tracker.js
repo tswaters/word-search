@@ -1,27 +1,20 @@
-import { useState, useCallback, useRef, useContext } from 'react'
+import { useCallback, useRef, useContext, useMemo } from 'react'
 import { GameContext } from '../components/Game'
+import { between } from '../lib/grid'
 
 const useMouseTracking = ({ onChange, onFinish, onAbort }) => {
-  const { xmax, ymax } = useContext(GameContext)
+  const { board, xmax, cellWidth, cellHeight, x, y } = useContext(GameContext)
 
   const start = useRef(null)
   const end = useRef(null)
 
-  // the board rect might mutate over time (changing xmax/ymax) alters css/dimensions
-  // as such, need a reference to the dom node so we can call `getBoundingClientRect`
-  const [boardNode, setBoardNode] = useState(null)
-  const ref = useCallback(domNode => domNode && setBoardNode(domNode), [])
-
   const getPosition = useCallback(
     e => {
-      const { x, y, width, height } = boardNode.getBoundingClientRect()
-      const cellWidth = width / xmax
-      const cellHeight = height / ymax
       const cellX = Math.floor((e.clientX - x) / cellWidth)
       const cellY = Math.floor((e.clientY - y) / cellHeight)
       return cellX + cellY * xmax
     },
-    [xmax, ymax, boardNode]
+    [xmax, x, y, cellWidth, cellHeight]
   )
 
   const handleMouseDown = useCallback(
@@ -37,16 +30,28 @@ const useMouseTracking = ({ onChange, onFinish, onAbort }) => {
       const newEnd = getPosition(e)
       if (newEnd === end.current) return
       end.current = newEnd
-      onChange({ start: start.current, end: end.current })
+      const [startIndex, endIndex] = between({
+        board,
+        xmax,
+        start: start.current,
+        end: end.current
+      })
+      onChange({ startIndex, endIndex })
     },
-    [getPosition, onChange]
+    [getPosition, onChange, board, xmax]
   )
 
   const handleMouseUp = useCallback(() => {
-    onFinish({ start: start.current, end: end.current })
+    const [startIndex, endIndex] = between({
+      board,
+      xmax,
+      start: start.current,
+      end: end.current
+    })
+    onFinish({ startIndex, endIndex })
     start.current = null
     end.current = null
-  }, [onFinish])
+  }, [onFinish, board, xmax])
 
   const handleMouseLeave = useCallback(() => {
     if (start.current == null) return
@@ -55,13 +60,15 @@ const useMouseTracking = ({ onChange, onFinish, onAbort }) => {
     end.current = null
   }, [onAbort])
 
-  return {
-    ref,
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleMouseLeave
-  }
+  return useMemo(
+    () => ({
+      handleMouseDown,
+      handleMouseMove,
+      handleMouseUp,
+      handleMouseLeave
+    }),
+    [handleMouseDown, handleMouseMove, handleMouseUp, handleMouseLeave]
+  )
 }
 
 export { useMouseTracking }

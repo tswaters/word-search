@@ -1,24 +1,26 @@
 import assert from 'assert'
 import { between } from '../lib/grid'
 
+// prettier-ignore
+const board = [
+  'a', 'b', 'c', 'd', 'e',
+  'f', 'g', 'h', 'i', 'j',
+  'k', 'l', 'm', 'n', 'o',
+  'p', 'q', 'r', 's', 't',
+  'u', 'v', 'w', 'x', 'y'
+]
+
 describe('between', () => {
   const tests = [
     {
       xmax: 5,
-      // prettier-ignore
-      board: [
-        'a', 'b', 'c', 'd', 'e',
-        'f', 'g', 'h', 'i', 'j',
-        'k', 'l', 'm', 'n', 'o',
-        'p', 'q', 'r', 's', 't',
-        'u', 'v', 'w', 'x', 'y'
-      ],
+      board,
       specs: [
-        { start: 0, end: 4, actual: ['a', 'b', 'c', 'd', 'e'] },
-        { start: 4, end: 0, actual: ['e', 'd', 'c', 'b', 'a'] },
-        { start: 0, end: 20, actual: ['a', 'f', 'k', 'p', 'u'] },
-        { start: 0, end: 24, actual: ['a', 'g', 'm', 's', 'y'] },
-        { start: 0, end: 1, actual: ['a', 'b'] },
+        { start: 0, end: 4, actual: [board.indexOf('a'), board.indexOf('e')] },
+        { start: 4, end: 0, actual: [board.indexOf('e'), board.indexOf('a')] },
+        { start: 0, end: 20, actual: [board.indexOf('a'), board.indexOf('u')] },
+        { start: 0, end: 24, actual: [board.indexOf('a'), board.indexOf('y')] },
+        { start: 0, end: 1, actual: [board.indexOf('a'), board.indexOf('b')] },
         { start: 0, end: 0, actual: [] }
       ]
     }

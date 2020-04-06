@@ -14,9 +14,9 @@ const sizes = {
 describe('populate', () =>
   Object.entries(sizes).forEach(([size, opts]) =>
     it(size, () => {
-      const { placedWords, board } = populate(opts)
+      const { placed, board } = populate(opts)
       assert.deepEqual(
-        board.map(x => (x.letter ? x.letter : ' ')),
+        board.map(letter => letter || ' '),
         // prettier-ignore
         [
           ' ', 'b', 'f', ' ', ' ',
@@ -26,6 +26,6 @@ describe('populate', () =>
           ' ', ' ', ' ', ' ', 'z'
         ]
       )
-      assert.deepEqual(Object.keys(placedWords).sort(), opts.source.sort())
+      assert.deepEqual(Object.keys(placed).sort(), opts.source.sort())
     })
   ))

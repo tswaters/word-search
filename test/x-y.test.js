@@ -25,9 +25,9 @@ describe('x/y', () => {
     describe(`xmax: ${xmax}`, () => {
       specs.forEach(({ index, actual }) => {
         it(`index: ${index}`, () => {
-          assert.equal(x({ xmax, index }), actual[0])
-          assert.equal(y({ xmax, index }), actual[1])
-          assert.deepEqual(xy({ xmax, index }), actual)
+          assert.equal(x(xmax, index), actual[0])
+          assert.equal(y(xmax, index), actual[1])
+          assert.deepEqual(xy(xmax, index), actual)
         })
       })
     })

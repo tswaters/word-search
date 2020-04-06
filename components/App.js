@@ -5,8 +5,6 @@ import { string } from 'prop-types'
 import { container, menu, header } from '../css/index'
 import Game from './Game'
 import Form from './Form'
-import Board from './Board'
-import WordList from './WordList'
 import ButtonToggle from './ButtonToggle'
 import LightSwitch from './LightSwitch'
 import { useStorage } from '../hooks/storage'
@@ -18,12 +16,25 @@ const App = ({ APP_VERSION }) => {
     ymax: 15,
     wordSet: 'space'
   })
+  const [found, setFound] = useStorage('foundWords', [])
 
   const handleNewGame = useCallback(
     newOpts => {
       setOpts({ ...newOpts, seed: Math.floor(Math.random() * 500) })
+      setFound([])
     },
-    [setOpts]
+    [setOpts, setFound]
+  )
+
+  const handleNewWords = useCallback(
+    newWords => {
+      setFound(prev => {
+        const items = new Set(prev)
+        newWords.forEach(item => items.add(item))
+        return items.length === prev.length ? prev : Array.from(items)
+      })
+    },
+    [setFound]
   )
 
   return (
@@ -43,10 +54,9 @@ const App = ({ APP_VERSION }) => {
         ymax={opts.ymax}
         seed={opts.seed}
         wordSet={opts.wordSet}
-      >
-        <Board />
-        <WordList />
-      </Game>
+        found={found}
+        onFound={handleNewWords}
+      />
     </div>
   )
 }

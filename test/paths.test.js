@@ -153,7 +153,7 @@ describe('path', () =>
           directions.forEach((direction, dirIndex) =>
             it(prettyDir(direction), () =>
               assert.deepEqual(
-                path({ board, xmax, index, direction }),
+                path({ board, xmax, index, direction, populate: true }),
                 actual[dirIndex]
               )
             )

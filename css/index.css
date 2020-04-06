@@ -1,9 +1,6 @@
 :root {
-  --cell-dimensions: 25px;
   --grid-xmax: 15;
   --grid-ymax: 15;
-  --cell-count: 4;
-  --border-width: 1px;
 
   --color: black;
   --background-color: white;
@@ -35,6 +32,8 @@
 }
 
 body {
+  padding: 0;
+  margin: 0;
   color: var(--color);
   background-color: var(--background-color);
   font-family: sans-serif;
@@ -45,15 +44,98 @@ body {
   margin: 0 auto;
 }
 
+.game {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: none;
+}
+
+.menu {
+  text-align: right;
+}
+
 .button {
-  width: 4em;
-  height: 2em;
-  margin: 0.25em;
+  width: 4rem;
+  height: 2rem;
+  margin: 0.25rem;
   display: inline-block;
   text-align: center;
   color: var(--color);
   background-color: var(--background-color);
   border: 1px solid var(--border-color);
+}
+
+.board {
+  position: relative;
+  user-select: none;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-xmax), 1fr);
+  grid-template-rows: repeat(var(--grid-ymax), 1fr);
+  align-items: center;
+  justify-items: center;
+  margin-bottom: 1rem;
+}
+
+.overlay {
+  position: absolute;
+  border-radius: 100px;
+  z-index: -1;
+}
+
+.overlay.invalid {
+  border: 1px solid var(--color-invalid);
+  background-color: var(--background-invalid);
+}
+
+.overlay.selected {
+  border: 1px solid var(--color-selected);
+  background-color: var(--background-selected);
+}
+
+.overlay.found {
+  position: absolute;
+  border: 1px solid var(--color-found);
+  background-color: var(--background-found);
+  border-radius: 100px;
+  z-index: -1;
+}
+
+.cell {
+  font-size: 2vw;
+  padding: 0.05rem;
+  text-transform: uppercase;
+}
+
+ul.word-list {
+  margin: 0;
+  padding: 0;
+}
+
+ul.word-list > li {
+  display: inline;
+}
+
+ul.word-list > li > span {
+  display: inline-block;
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0.25rem;
+  color: var(--color);
+  background-color: var(--background-color);
+  font: normal 1rem sans-serif;
+}
+
+ul.word-list > li > .cheat:hover {
+  color: var(--color-cheat);
+  background-color: var(--background-cheat);
+}
+
+.word-list > .found span {
+  text-decoration: line-through;
 }
 
 form {
@@ -65,101 +147,11 @@ form {
 }
 
 .form-group > input[type='number'] {
-  width: 2.5em;
+  width: 2.5rem;
 }
 
 .form-group > select,
 .form-group > input[type='number'],
 .form-group > label {
-  margin-right: 0.5em;
-}
-
-.game {
-}
-
-.menu {
-  text-align: right;
-}
-
-.header {
-  display: none;
-}
-
-.board {
-  user-select: none;
-  display: grid;
-  grid-template-columns: repeat(var(--grid-xmax), 1fr);
-  grid-template-rows: repeat(var(--grid-ymax), 1fr);
-}
-
-.cell {
-  padding: 0.25em;
-  border: var(--border-width) solid var(--border-color);
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.cell.found {
-  color: var(--color-found);
-  background-color: var(--background-found);
-}
-
-.cell.selected {
-  color: var(--color-selected);
-  background-color: var(--background-selected);
-}
-
-.cell.invalid {
-  color: var(--color-invalid);
-  background-color: var(--background-invalid);
-}
-
-/* prettier-ignore */
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(-2px);
-  }
-  20%, 40%, 60%, 80% {
-    transform: translateX(2px);
-  }
-}
-
-.letter {
-  font-size: 2vw;
-}
-
-.cell.invalid .letter {
-  display: inline-block;
-  position: relative;
-  animation: shake 0.5s linear;
-}
-
-ul.word-list {
-}
-
-ul.word-list > li {
-  display: inline;
-}
-
-ul.word-list > li > span {
-  display: inline-block;
-  border: 1px solid white;
-  border-radius: 0.5em;
-  padding: 0.5em;
-  margin: 0.25em;
-  color: var(--color);
-  background-color: var(--background-color);
-  font: normal 1em sans-serif;
-}
-
-ul.word-list > li > .cheat:hover {
-  color: var(--color-cheat);
-  background-color: var(--background-cheat);
-}
-
-.word-list > .found span {
-  text-decoration: line-through;
+  margin-right: 0.5rem;
 }
