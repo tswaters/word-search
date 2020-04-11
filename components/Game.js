@@ -10,10 +10,12 @@ import { number, string, arrayOf, func } from 'prop-types'
 
 import { game } from '../css/index'
 import * as allWords from '../dict'
-import { populate } from '../lib/grid'
+import { populate, range } from '../lib/grid'
 import { random } from '../lib/random'
 import Board from './Board'
 import WordList from './WordList'
+import Selection from './Selection'
+import FoundWords from './FoundWords'
 
 export const GameContext = createContext(null)
 
@@ -56,6 +58,29 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
     [seed, xmax, ymax, wordSet]
   )
 
+  const onWordSelected = useCallback(
+    selection => {
+      const available = Object.keys(placed).sort()
+      const possibleWord = range({ board, xmax, selection })
+
+      // user is allowed to select something even if they select it backwards
+      const checks = [possibleWord.join(''), possibleWord.reverse().join('')]
+      const foundWord = available.find(word => checks.some(p => p === word))
+      const isFound = foundWord != null
+
+      if (foundWord) {
+        onFound(
+          available.filter(
+            word => word === foundWord || foundWord.includes(word)
+          )
+        )
+      }
+
+      return isFound
+    },
+    [board, placed, xmax, onFound]
+  )
+
   const [ctx, setCtx] = useState({
     xmax,
     ymax,
@@ -63,9 +88,9 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
     y,
     cellWidth: 0,
     cellHeight: 0,
-    onFound,
     found: [],
     onDimsChanged,
+    onWordSelected,
     board,
     placed
   })
@@ -79,9 +104,9 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
         y,
         cellWidth: width / xmax,
         cellHeight: height / ymax,
-        onFound,
         found,
         onDimsChanged,
+        onWordSelected,
         board,
         placed
       })
@@ -101,7 +126,6 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
       cancelAnimationFrame(tid)
     }
   }, [
-    onFound,
     found,
     xmax,
     ymax,
@@ -110,6 +134,7 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
     width,
     height,
     onDimsChanged,
+    onWordSelected,
     board,
     placed
   ])
@@ -118,6 +143,8 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
     <GameContext.Provider value={ctx}>
       <div className={game}>
         <Board />
+        <Selection />
+        <FoundWords />
         <WordList />
       </div>
     </GameContext.Provider>

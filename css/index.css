@@ -1,39 +1,34 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
 :root {
   --grid-xmax: 15;
   --grid-ymax: 15;
 
-  --color: black;
+  --color: #595959;
   --background-color: white;
-  --border-color: black;
+  --border-color: #595959;
 
-  --color-selected: black;
+  --border-color-selected: black;
   --background-selected: khaki;
 
-  --color-found: blue;
+  --border-color-found: blue;
   --background-found: lightblue;
 
-  --color-invalid: brown;
+  --border-color-invalid: brown;
   --background-invalid: salmon;
 }
 
 :root .dark-mode {
-  --color: gray;
   --background-color: black;
-  --border-color: gray;
-
-  --color-selected: gray;
-  --background-selected: khaki;
-
-  --color-found: blue;
-  --background-found: lightblue;
-
-  --color-invalid: brown;
-  --background-invalid: salmon;
 }
 
 body {
-  padding: 0;
-  margin: 0;
   color: var(--color);
   background-color: var(--background-color);
   font-family: sans-serif;
@@ -42,11 +37,11 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  height: 100vh;
 }
 
 .game {
-  display: flex;
-  flex-direction: column;
 }
 
 .header {
@@ -55,6 +50,9 @@ body {
 
 .menu {
   text-align: right;
+  position: absolute;
+  width: 100%;
+  height: 5vh;
 }
 
 .button {
@@ -69,7 +67,10 @@ body {
 }
 
 .grid {
-  position: relative;
+  position: absolute;
+  width: 100%;
+  top: 5vh;
+  height: 80vh;
   user-select: none;
   display: grid;
   grid-template-columns: repeat(var(--grid-xmax), 1fr);
@@ -82,10 +83,20 @@ body {
   --overlay-height: 0px;
 }
 
+.grid.board {
+  pointer-events: none;
+}
+
+.grid.selection {
+}
+
+.grid.found {
+  pointer-events: none;
+}
+
 .overlay {
   position: absolute;
   border-radius: 100px;
-  z-index: -1;
   top: calc(var(--cell-height) * var(--start-y));
   left: calc(var(--cell-width) * var(--start-x));
   height: calc(var(--overlay-height));
@@ -93,21 +104,21 @@ body {
 }
 
 .overlay.invalid {
-  border: 1px solid var(--color-invalid);
+  border: 1px solid var(--border-color-invalid);
   background-color: var(--background-invalid);
+  z-index: -1;
 }
 
 .overlay.selected {
-  border: 1px solid var(--color-selected);
+  border: 1px solid var(--border-color-selected);
   background-color: var(--background-selected);
+  z-index: -2;
 }
 
 .overlay.found {
-  position: absolute;
-  border: 1px solid var(--color-found);
+  border: 1px solid var(--border-color-found);
   background-color: var(--background-found);
-  border-radius: 100px;
-  z-index: -1;
+  z-index: -3;
 }
 
 .cell {
@@ -117,8 +128,8 @@ body {
 }
 
 ul.word-list {
-  margin: 0;
-  padding: 0;
+  position: absolute;
+  bottom: 0;
 }
 
 ul.word-list > li {
