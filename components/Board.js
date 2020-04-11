@@ -1,12 +1,10 @@
 import React, {
   memo,
-  useRef,
   useContext,
   useMemo,
   useState,
   useCallback,
   useEffect,
-  useLayoutEffect
 } from 'react'
 import { unstable_batchedUpdates } from 'react-dom'
 import {
@@ -14,6 +12,7 @@ import {
   found as foundClassName,
   selected as selectedClassName,
   invalid as invalidClassName,
+  grid as gridClassName,
   cell as cellClassName
 } from '../css/index'
 import { useMouseTracking } from '../hooks/mouse-tracker'
@@ -21,6 +20,7 @@ import { useMouseTracking } from '../hooks/mouse-tracker'
 import Overlay from './Overlay'
 import { GameContext } from './Game'
 import { range } from '../lib/grid'
+import { useGridLayout } from '../hooks/use-grid-layout'
 
 const Board = () => {
   const {
@@ -30,18 +30,13 @@ const Board = () => {
     onFound,
     xmax,
     ymax,
-    onDimsChanged
   } = useContext(GameContext)
 
-  const boardRef = useRef(null)
   const [removingInactive, setRemovingInactive] = useState(null)
 
   const [selection, setSelection] = useState(null)
   const [invalid, setInvalid] = useState(null)
 
-  useLayoutEffect(() => {
-    onDimsChanged(boardRef.current.getBoundingClientRect())
-  })
 
   const available = useMemo(() => Object.keys(placed).sort(), [placed])
 
@@ -102,18 +97,16 @@ const Board = () => {
     handleMouseUp
   } = useMouseTracking({ onAbort, onChange, onFinish })
 
+  const { gridRef, gridStyles } = useGridLayout()
   return (
     <div
-      ref={boardRef}
+      ref={gridRef}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
-      className={boardClassName}
-      style={{
-        '--grid-xmax': xmax,
-        '--grid-ymax': ymax
-      }}
+      className={`${boardClassName} ${gridClassName}`}
+      style={gridStyles}
     >
       {selection && <Overlay className={selectedClassName} range={selection} />}
 

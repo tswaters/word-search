@@ -17,18 +17,14 @@ const Overlay = ({ range, className = '' }) => {
 
   const widgetX = cellWidth * (endX - startX)
   const widgetY = cellHeight * (endY - startY)
-  const cssTop = cellHeight * startY
-  const cssLeft = cellWidth * startX
   const inverse = endX < startX ? 180 : 0
   const rotateDeg = Math.atan(widgetY / widgetX) / (Math.PI / 180) - inverse
   const baseWidth = Math.max(cellWidth, cellHeight)
   const style = {
-    top: `${cellHeight * startY}px`,
-    left: `${cellWidth * startX}px`
-    height: `${Math.min(cellWidth, cellHeight)}px`,
+    '--start-x': startX,
+    '--start-y': startY,
     width: `${baseWidth + (widgetX ** 2 + widgetY ** 2) ** 0.5}px`,
-    transform: `rotate(${rotateDeg.toFixed(2)}deg)`,
-    transformOrigin: `${cellWidth / 2}px center`
+    transform: `rotate(${rotateDeg.toFixed(2)}deg)`
   }
 
   return <div className={`${className} ${overlay}`} style={style} />

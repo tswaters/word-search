@@ -68,7 +68,7 @@ body {
   border: 1px solid var(--border-color);
 }
 
-.board {
+.grid {
   position: relative;
   user-select: none;
   display: grid;
@@ -77,12 +77,19 @@ body {
   align-items: center;
   justify-items: center;
   margin-bottom: 1rem;
+  --cell-height: 0px;
+  --cell-width: 0px;
+  --overlay-height: 0px;
 }
 
 .overlay {
   position: absolute;
   border-radius: 100px;
   z-index: -1;
+  top: calc(var(--cell-height) * var(--start-y));
+  left: calc(var(--cell-width) * var(--start-x));
+  height: calc(var(--overlay-height));
+  transform-origin: calc(var(--cell-width) / 2) center;
 }
 
 .overlay.invalid {
