@@ -83,7 +83,6 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
 
   const [ctx, setCtx] = useState({
     xmax,
-    ymax,
     x,
     y,
     cellWidth: 0,
@@ -99,7 +98,6 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
     const setter = () => {
       setCtx({
         xmax,
-        ymax,
         x,
         y,
         cellWidth: width / xmax,
