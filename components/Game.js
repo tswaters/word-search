@@ -37,7 +37,7 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
   const onDimsChanged = useCallback(
     newDims =>
       setDimensions(oldDims =>
-        oldDims.width === newDims.height && oldDims.height === newDims.height
+        oldDims.width === newDims.width && oldDims.height === newDims.height
           ? oldDims
           : newDims
       ),
