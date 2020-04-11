@@ -3,14 +3,14 @@ import React, {
   useContext,
   useState,
   useCallback,
-  useEffect
+  useEffect,
 } from 'react'
 import { unstable_batchedUpdates } from 'react-dom'
 import {
   selection as selectionClassName,
   selected as selectedClassName,
   invalid as invalidClassName,
-  grid as gridClassName
+  grid as gridClassName,
 } from '../css/index'
 import { useMouseTracking } from '../hooks/mouse-tracker'
 import { useGridLayout } from '../hooks/use-grid-layout'
@@ -27,13 +27,13 @@ const Selection = () => {
 
   const onAbort = useCallback(() => setSelection(null), [])
 
-  const onChange = useCallback(selection => {
+  const onChange = useCallback((selection) => {
     setInvalid(false)
     setSelection(selection)
   }, [])
 
   const onFinish = useCallback(
-    selection =>
+    (selection) =>
       onWordSelected(selection) ? setSelection(null) : setInvalid(true),
     [onWordSelected]
   )
@@ -55,7 +55,7 @@ const Selection = () => {
     handleMouseDown,
     handleMouseLeave,
     handleMouseMove,
-    handleMouseUp
+    handleMouseUp,
   } = useMouseTracking({ onAbort, onChange, onFinish })
 
   return (

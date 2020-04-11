@@ -18,32 +18,32 @@ module.exports = (_, argv) => {
     devServer: {
       contentBase: path.join(__dirname, 'dist'),
       compress: true,
-      port: 9000
+      port: 9000,
     },
     entry: {
-      'word-search': ['react-hot-loader/patch', './components']
+      'word-search': ['react-hot-loader/patch', './components'],
     },
     target: 'web',
     output: {
       path: path.resolve('./dist'),
-      filename: `word-search${chunkhash}.js`
+      filename: `word-search${chunkhash}.js`,
     },
     optimization: {
       splitChunks: { chunks: 'all' },
-      minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})]
+      minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})],
     },
     resolve: {
       extensions: ['.webpack.js', '.web.js', '.js', '.jsx', '.css', '.json'],
       alias: {
-        'react-dom': '@hot-loader/react-dom'
-      }
+        'react-dom': '@hot-loader/react-dom',
+      },
     },
     module: {
       rules: [
         {
           test: /\.jsx?$/,
           exclude: /node_modules/,
-          use: 'babel-loader'
+          use: 'babel-loader',
         },
         {
           test: /\.css$/,
@@ -52,8 +52,8 @@ module.exports = (_, argv) => {
             {
               loader: MiniCssExtractPlugin.loader,
               options: {
-                hmr: !prod
-              }
+                hmr: !prod,
+              },
             },
             {
               loader: 'css-loader',
@@ -62,38 +62,38 @@ module.exports = (_, argv) => {
                 modules: {
                   localIdentName: prod
                     ? '[hash:base64:5]'
-                    : '[path][name]__[local]--[hash:base64:5]'
+                    : '[path][name]__[local]--[hash:base64:5]',
                 },
                 localsConvention: 'camelCase',
-                importLoaders: 1
-              }
-            }
-          ]
-        }
-      ]
+                importLoaders: 1,
+              },
+            },
+          ],
+        },
+      ],
     },
     plugins: [
       new webpack.DefinePlugin({
         APP_VERSION: JSON.stringify(packageJson.version),
-        NODE_ENV: JSON.stringify('development')
+        NODE_ENV: JSON.stringify('development'),
       }),
       new HtmlWebpackPlugin({
         template: './html/index.html',
         filename: './index.html',
         minify: {
-          collapseWhitespace: prod
-        }
+          collapseWhitespace: prod,
+        },
       }),
       new MiniCssExtractPlugin({
         filename: `[name]${chunkhash}.css`,
-        chunkFilename: `[id]${chunkhash}.css`
+        chunkFilename: `[id]${chunkhash}.css`,
       }),
       new OfflinePlugin({
         ServiceWorker: {
           minify: prod,
-          events: true
-        }
-      })
-    ]
+          events: true,
+        },
+      }),
+    ],
   }
 }

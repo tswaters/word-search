@@ -20,9 +20,9 @@ describe('get cells from start/current', () => {
         { start: 4, end: 0, actual: [W, 4] }, // left
         { start: 20, end: 19, actual: [E, 4] }, // right, a bit up
         { start: 24, end: 4, actual: [N, 4] }, // up
-        { start: 24, end: 3, actual: [N, 4] } // up, a bit left
-      ]
-    }
+        { start: 24, end: 3, actual: [N, 4] }, // up, a bit left
+      ],
+    },
   ]
 
   tests.forEach(({ xmax, specs }) => {

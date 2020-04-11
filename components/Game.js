@@ -4,7 +4,7 @@ import React, {
   useState,
   useLayoutEffect,
   useCallback,
-  useMemo
+  useMemo,
 } from 'react'
 import { number, string, arrayOf, func } from 'prop-types'
 
@@ -33,12 +33,12 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
     x: 0,
     y: 0,
     height: 0,
-    width: 0
+    width: 0,
   })
 
   const onDimsChanged = useCallback(
-    newDims =>
-      setDimensions(oldDims =>
+    (newDims) =>
+      setDimensions((oldDims) =>
         oldDims.width === newDims.width && oldDims.height === newDims.height
           ? oldDims
           : newDims
@@ -53,25 +53,25 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
         ymax,
         rnd: random(seed),
         source: allWords[wordSet],
-        fill: true
+        fill: true,
       }),
     [seed, xmax, ymax, wordSet]
   )
 
   const onWordSelected = useCallback(
-    selection => {
+    (selection) => {
       const available = Object.keys(placed).sort()
       const possibleWord = range({ board, xmax, selection })
 
       // user is allowed to select something even if they select it backwards
       const checks = [possibleWord.join(''), possibleWord.reverse().join('')]
-      const foundWord = available.find(word => checks.some(p => p === word))
+      const foundWord = available.find((word) => checks.some((p) => p === word))
       const isFound = foundWord != null
 
       if (foundWord) {
         onFound(
           available.filter(
-            word => word === foundWord || foundWord.includes(word)
+            (word) => word === foundWord || foundWord.includes(word)
           )
         )
       }
@@ -91,7 +91,7 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
     onDimsChanged,
     onWordSelected,
     board,
-    placed
+    placed,
   })
 
   useLayoutEffect(() => {
@@ -106,7 +106,7 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
         onDimsChanged,
         onWordSelected,
         board,
-        placed
+        placed,
       })
     }
 
@@ -134,7 +134,7 @@ const Game = ({ xmax, ymax, seed, wordSet, found, onFound }) => {
     onDimsChanged,
     onWordSelected,
     board,
-    placed
+    placed,
   ])
 
   return (
@@ -155,7 +155,7 @@ Game.propTypes = {
   seed: number.isRequired,
   wordSet: string.isRequired,
   found: arrayOf(string).isRequired,
-  onFound: func.isRequired
+  onFound: func.isRequired,
 }
 
 export { Game }

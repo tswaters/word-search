@@ -17,8 +17,8 @@ const sizes = {
         actual: [
           ['a', 'b', 'c'],
           ['a', 'd', 'g'],
-          ['a', 'e', 'i']
-        ]
+          ['a', 'e', 'i'],
+        ],
       },
       'index: 6 - bottom left': {
         index: 6,
@@ -26,8 +26,8 @@ const sizes = {
         actual: [
           ['g', 'h', 'i'],
           ['g', 'd', 'a'],
-          ['g', 'e', 'c']
-        ]
+          ['g', 'e', 'c'],
+        ],
       },
       'index 4 - middle': {
         index: 4,
@@ -50,8 +50,8 @@ const sizes = {
           ['e', 'i'],
           ['e', 'b'],
           ['e', 'a'],
-          ['e', 'c']
-        ]
+          ['e', 'c'],
+        ],
       },
       'index: 2 - top-right': {
         index: 2,
@@ -59,8 +59,8 @@ const sizes = {
         actual: [
           ['c', 'b', 'a'],
           ['c', 'f', 'i'],
-          ['c', 'e', 'g']
-        ]
+          ['c', 'e', 'g'],
+        ],
       },
       'index: 4 - middle': {
         index: 4,
@@ -83,10 +83,10 @@ const sizes = {
           ['e', 'i'],
           ['e', 'b'],
           ['e', 'a'],
-          ['e', 'c']
-        ]
-      }
-    }
+          ['e', 'c'],
+        ],
+      },
+    },
   },
   '5x5': {
     xmax: 5,
@@ -105,8 +105,8 @@ const sizes = {
         actual: [
           ['a', 'b', 'c', 'd', 'e'],
           ['a', 'f', 'k', 'p', 'u'],
-          ['a', 'g', 'm', 's', 'y']
-        ]
+          ['a', 'g', 'm', 's', 'y'],
+        ],
       },
       'index 11 - middle - all paths': {
         index: 12,
@@ -129,8 +129,8 @@ const sizes = {
           ['m', 's', 'y'],
           ['m', 'h', 'c'],
           ['m', 'g', 'a'],
-          ['m', 'i', 'e']
-        ]
+          ['m', 'i', 'e'],
+        ],
       },
       'index 20 - bottom left': {
         index: 20,
@@ -138,11 +138,11 @@ const sizes = {
         actual: [
           ['u', 'v', 'w', 'x', 'y'],
           ['u', 'p', 'k', 'f', 'a'],
-          ['u', 'q', 'm', 'i', 'e']
-        ]
-      }
-    }
-  }
+          ['u', 'q', 'm', 'i', 'e'],
+        ],
+      },
+    },
+  },
 }
 
 describe('path', () =>

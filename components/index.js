@@ -10,7 +10,7 @@ if (NODE_ENV === 'production')
     onUpdated: () => {
       localStorage.clear()
       window.location.reload()
-    }
+    },
   })
 
 render(<App APP_VERSION={APP_VERSION} />, document.getElementById('root'))

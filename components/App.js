@@ -14,12 +14,12 @@ const App = ({ APP_VERSION }) => {
     seed: 2,
     xmax: 20,
     ymax: 15,
-    wordSet: 'space'
+    wordSet: 'space',
   })
   const [found, setFound] = useStorage('foundWords', [])
 
   const handleNewGame = useCallback(
-    newOpts => {
+    (newOpts) => {
       setOpts({ ...newOpts, seed: Math.floor(Math.random() * 500) })
       setFound([])
     },
@@ -27,10 +27,10 @@ const App = ({ APP_VERSION }) => {
   )
 
   const handleNewWords = useCallback(
-    newWords => {
-      setFound(prev => {
+    (newWords) => {
+      setFound((prev) => {
         const items = new Set(prev)
-        newWords.forEach(item => items.add(item))
+        newWords.forEach((item) => items.add(item))
         return items.length === prev.length ? prev : Array.from(items)
       })
     },
@@ -62,7 +62,7 @@ const App = ({ APP_VERSION }) => {
 }
 
 App.propTypes = {
-  APP_VERSION: string.isRequired
+  APP_VERSION: string.isRequired,
 }
 
 export default hot(App)

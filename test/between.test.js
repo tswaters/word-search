@@ -21,9 +21,9 @@ describe('between', () => {
         { start: 0, end: 20, actual: [board.indexOf('a'), board.indexOf('u')] },
         { start: 0, end: 24, actual: [board.indexOf('a'), board.indexOf('y')] },
         { start: 0, end: 1, actual: [board.indexOf('a'), board.indexOf('b')] },
-        { start: 0, end: 0, actual: [] }
-      ]
-    }
+        { start: 0, end: 0, actual: [] },
+      ],
+    },
   ]
   tests.forEach(({ xmax, board, specs }) => {
     describe(`xmax: ${xmax}`, () => {

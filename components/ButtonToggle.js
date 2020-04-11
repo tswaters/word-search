@@ -8,13 +8,13 @@ const ButtonToggle = ({
   label: [offLabel, onLabel = 'Close'],
   children,
   onToggle,
-  esc = true
+  esc = true,
 }) => {
   const [toggle, setToggled] = useState(initial || false)
 
   useEffect(() => {
     if (!esc || !toggle) return
-    const handler = e => {
+    const handler = (e) => {
       if (e.keyCode !== 27) return
       setToggled(false)
     }
@@ -30,7 +30,7 @@ const ButtonToggle = ({
     onToggle?.(toggle)
   }, [onToggle, toggle])
 
-  const handleToggle = useCallback(() => setToggled(toggled => !toggled), [])
+  const handleToggle = useCallback(() => setToggled((toggled) => !toggled), [])
 
   return (
     <>
@@ -56,7 +56,7 @@ ButtonToggle.propTypes = {
   label: arrayOf(string),
   children: oneOfType([array, node]),
   onToggle: func,
-  esc: bool
+  esc: bool,
 }
 
 export { ButtonToggle }

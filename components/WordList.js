@@ -9,7 +9,7 @@ const WordList = () => {
     <ul className={wordList}>
       {Object.keys(placed)
         .sort()
-        .map(word => (
+        .map((word) => (
           <li key={word} className={found.includes(word) ? foundWordClass : ''}>
             <span>{word}</span>
           </li>

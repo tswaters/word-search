@@ -29,7 +29,7 @@ const useStorage = (key, d) => {
     localStorage.setItem(key, JSON.stringify(newValue))
   }, [key, newValue])
 
-  return [newValue, useCallback(val => setVal(val), [])]
+  return [newValue, useCallback((val) => setVal(val), [])]
 }
 
 export { useStorage }

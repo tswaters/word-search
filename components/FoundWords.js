@@ -14,7 +14,7 @@ const FoundWords = () => {
       className={`${foundClassName} ${gridClassName}`}
       style={gridStyles}
     >
-      {found.map(word => (
+      {found.map((word) => (
         <Overlay key={word} className={foundClassName} range={placed[word]} />
       ))}
     </div>

@@ -2,7 +2,7 @@ import React, { memo, useContext } from 'react'
 import {
   board as boardClassName,
   grid as gridClassName,
-  cell as cellClassName
+  cell as cellClassName,
 } from '../css/index'
 
 import { GameContext } from './Game'

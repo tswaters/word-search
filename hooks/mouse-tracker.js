@@ -9,7 +9,7 @@ const useMouseTracking = ({ onChange, onFinish, onAbort }) => {
   const end = useRef(null)
 
   const getPosition = useCallback(
-    e => {
+    (e) => {
       const cellX = Math.floor((e.clientX - x) / cellWidth)
       const cellY = Math.floor((e.clientY - y) / cellHeight)
       return cellX + cellY * xmax
@@ -18,14 +18,14 @@ const useMouseTracking = ({ onChange, onFinish, onAbort }) => {
   )
 
   const handleMouseDown = useCallback(
-    e => {
+    (e) => {
       start.current = end.current = getPosition(e)
     },
     [getPosition]
   )
 
   const handleMouseMove = useCallback(
-    e => {
+    (e) => {
       if (start.current == null) return
       const newEnd = getPosition(e)
       if (newEnd === end.current) return
@@ -34,7 +34,7 @@ const useMouseTracking = ({ onChange, onFinish, onAbort }) => {
         board,
         xmax,
         start: start.current,
-        end: end.current
+        end: end.current,
       })
       onChange({ startIndex, endIndex })
     },
@@ -46,7 +46,7 @@ const useMouseTracking = ({ onChange, onFinish, onAbort }) => {
       board,
       xmax,
       start: start.current,
-      end: end.current
+      end: end.current,
     })
     onFinish({ startIndex, endIndex })
     start.current = null
@@ -65,7 +65,7 @@ const useMouseTracking = ({ onChange, onFinish, onAbort }) => {
       handleMouseDown,
       handleMouseMove,
       handleMouseUp,
-      handleMouseLeave
+      handleMouseLeave,
     }),
     [handleMouseDown, handleMouseMove, handleMouseUp, handleMouseLeave]
   )

@@ -14,25 +14,25 @@ const Form = ({ onNewGame, opts: initialOpts }) => {
   }, [initialOpts])
 
   const handleSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault()
       onNewGame(opts)
     },
     [onNewGame, opts]
   )
 
-  const handleUpdateYmax = useCallback(e => {
+  const handleUpdateYmax = useCallback((e) => {
     e.persist()
-    setOpts(opts => {
+    setOpts((opts) => {
       let input = parseInt(e.target.value, 10)
       if (Number.isNaN(input)) return opts
       return { ...opts, ymax: input }
     })
   }, [])
 
-  const handleUpdateXmax = useCallback(e => {
+  const handleUpdateXmax = useCallback((e) => {
     e.persist()
-    setOpts(opts => {
+    setOpts((opts) => {
       let input = parseInt(e.target.value, 10)
       if (Number.isNaN(input)) return opts
       return { ...opts, xmax: input }
@@ -40,7 +40,7 @@ const Form = ({ onNewGame, opts: initialOpts }) => {
   }, [])
 
   const handleUpdateWordset = useCallback(
-    e => setOpts({ ...opts, wordSet: e.target.value }),
+    (e) => setOpts({ ...opts, wordSet: e.target.value }),
     [opts]
   )
 
@@ -54,7 +54,7 @@ const Form = ({ onNewGame, opts: initialOpts }) => {
           value={opts.wordSet}
           onChange={handleUpdateWordset}
         >
-          {wordSets.map(set => (
+          {wordSets.map((set) => (
             <option value={set} key={set}>
               {set}
             </option>
@@ -106,8 +106,8 @@ Form.propTypes = {
   onNewGame: func.isRequired,
   opts: shape({
     xmax: number.isRequired,
-    ymax: number.isRequired
-  }).isRequired
+    ymax: number.isRequired,
+  }).isRequired,
 }
 
 export { Form }

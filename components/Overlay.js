@@ -24,7 +24,7 @@ const Overlay = ({ range, className = '' }) => {
     '--start-x': startX,
     '--start-y': startY,
     width: `${baseWidth + (widgetX ** 2 + widgetY ** 2) ** 0.5}px`,
-    transform: `rotate(${rotateDeg.toFixed(2)}deg)`
+    transform: `rotate(${rotateDeg.toFixed(2)}deg)`,
   }
 
   return <div className={`${className} ${overlay}`} style={style} />
@@ -35,9 +35,9 @@ Overlay.propTypes = {
   height: number,
   range: shape({
     startIndex: number,
-    endIndex: number
+    endIndex: number,
   }).isRequired,
-  className: string
+  className: string,
 }
 
 export { Overlay }

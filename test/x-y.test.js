@@ -17,9 +17,9 @@ describe('x/y', () => {
         { index: 4, actual: [4, 0] }, // top-right
         { index: 12, actual: [2, 2] }, // middle
         { index: 20, actual: [0, 4] }, // bottom-left
-        { index: 24, actual: [4, 4] } // bottom-right
-      ]
-    }
+        { index: 24, actual: [4, 4] }, // bottom-right
+      ],
+    },
   ]
   tests.forEach(({ xmax, specs }) => {
     describe(`xmax: ${xmax}`, () => {

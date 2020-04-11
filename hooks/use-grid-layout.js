@@ -16,8 +16,8 @@ const useGridLayout = () => {
         '--grid-xmax': xmax,
         '--overlay-height': `${Math.min(cellWidth, cellHeight)}px`,
         '--cell-width': `${cellWidth}px`,
-        '--cell-height': `${cellHeight}px`
-      }
+        '--cell-height': `${cellHeight}px`,
+      },
     }),
     [gridRef, xmax, cellWidth, cellHeight]
   )

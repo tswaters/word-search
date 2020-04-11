@@ -7,8 +7,8 @@ const sizes = {
     xmax: 5,
     ymax: 5,
     source: ['foo', 'bar', 'baz', 'qux'],
-    rnd: random(3)
-  }
+    rnd: random(3),
+  },
 }
 
 describe('populate', () =>
@@ -16,7 +16,7 @@ describe('populate', () =>
     it(size, () => {
       const { placed, board } = populate(opts)
       assert.deepEqual(
-        board.map(letter => letter || ' '),
+        board.map((letter) => letter || ' '),
         // prettier-ignore
         [
           ' ', 'b', 'f', ' ', ' ',
